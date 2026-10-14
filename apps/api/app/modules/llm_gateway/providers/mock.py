@@ -1,9 +1,11 @@
 """Deterministic provider for tests and key-less local development."""
 
 import hashlib
+import json
 import math
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass, field
+from typing import Any
 
 from app.modules.llm_gateway.config import Target
 from app.modules.llm_gateway.errors import LLMError
@@ -17,7 +19,31 @@ from app.modules.llm_gateway.types import (
 Responder = Callable[[CompletionRequest], str]
 
 
+def minimal_instance(schema: dict[str, Any]) -> Any:
+    """The most neutral value that satisfies a JSON Schema (for key-less development).
+
+    Enums resolve to "unknown" or "none" when offered, so a mock never invents facts about a user.
+    """
+    if "enum" in schema:
+        options = schema["enum"]
+        return next((o for o in ("unknown", "none") if o in options), options[0])
+    kind = schema.get("type")
+    if kind == "object":
+        return {name: minimal_instance(sub) for name, sub in schema.get("properties", {}).items()}
+    if kind == "array":
+        return []
+    if kind == "string":
+        return ""
+    if kind in ("number", "integer"):
+        return -1 if kind == "integer" else 0.0
+    if kind == "boolean":
+        return False
+    return None
+
+
 def _default_responder(request: CompletionRequest) -> str:
+    if request.response_schema:
+        return json.dumps(minimal_instance(request.response_schema))
     last = request.messages[-1].content if request.messages else ""
     return f"[mock] {last[:200]}"
 

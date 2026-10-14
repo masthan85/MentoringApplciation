@@ -1,0 +1,67 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useSyncExternalStore } from "react";
+import { installAuth } from "@/lib/browser-api";
+import { getToken, signOut } from "@/lib/session";
+
+const links = [
+  { href: "/chat", label: "Mentor" },
+  { href: "/notes", label: "My notes" },
+];
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  // The token lives in sessionStorage, which the server cannot see: render nothing until the
+  // browser confirms there is one.
+  const signedIn = useSyncExternalStore(
+    () => () => {},
+    () => getToken() !== null,
+    () => false,
+  );
+
+  useEffect(() => {
+    installAuth();
+    if (!getToken()) router.replace("/");
+  }, [router]);
+
+  if (!signedIn) return null;
+
+  return (
+    <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-4">
+      <header className="flex items-center justify-between py-4">
+        <nav aria-label="Main" className="flex gap-4 text-sm">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={pathname.startsWith(link.href) ? "page" : undefined}
+              className={pathname.startsWith(link.href) ? "font-medium underline underline-offset-4" : ""}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          className="text-sm"
+          style={{ color: "var(--muted)" }}
+          onClick={() => {
+            signOut();
+            router.replace("/");
+          }}
+        >
+          Sign out
+        </button>
+      </header>
+      <main id="main" className="flex-1 pb-8">
+        {children}
+      </main>
+      <footer className="py-4 text-xs" style={{ color: "var(--muted)" }}>
+        You are talking to an AI. It does not have human experience or professional
+        qualifications, and it is not a substitute for legal, medical, financial or mental health advice.
+      </footer>
+    </div>
+  );
+}

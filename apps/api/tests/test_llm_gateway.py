@@ -236,3 +236,34 @@ async def test_embeddings_route() -> None:
     again = await h.gateway.embed(["one"])
     assert again.vectors[0] == result.vectors[0]
     assert sum(v * v for v in result.vectors[0]) == pytest.approx(1.0)
+
+
+async def test_mock_answers_structured_requests_with_neutral_valid_json() -> None:
+    import json
+
+    from app.modules.llm_gateway.providers.mock import MockProvider as Mock
+    from app.modules.orchestration.classifier import build_schema
+    from app.modules.orchestration.onboarding import SCHEMA as PROFILE_SCHEMA
+
+    provider = Mock()
+    target = Target(provider="mock", model="mock-1")
+    classifier = await provider.complete(
+        target,
+        CompletionRequest(
+            messages=[Message("user", "x")], response_schema=build_schema(["a", "b"])
+        ),
+        100,
+    )
+    parsed = json.loads(classifier.text)
+    assert parsed["suggested_lens"] == "none" and parsed["risk_class"] == "normal"
+    profile = json.loads(
+        (
+            await provider.complete(
+                target,
+                CompletionRequest(messages=[Message("user", "x")], response_schema=PROFILE_SCHEMA),
+                100,
+            )
+        ).text
+    )
+    assert profile["role_family"] == "unknown" and profile["seniority"] == "unknown"
+    assert profile["stack"] == [] and profile["goals_summary"] == ""
