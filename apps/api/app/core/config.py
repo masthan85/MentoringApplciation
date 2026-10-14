@@ -43,6 +43,18 @@ class Settings(BaseSettings):
     llm_default_provider: Literal["anthropic", "openai", "mock"] = "anthropic"
     llm_cost_warn_usd_per_turn: float = 0.25
 
+    # Mentor packs (YAML). Defaults to the repository's /packs directory.
+    packs_dir: str | None = None
+    lens_switch_threshold: float = 0.7
+
+    # Background jobs: "arq" enqueues to the worker, "inline" runs in-process
+    # (local development without a worker, and tests).
+    jobs_mode: Literal["arq", "inline"] = "arq"
+
+    # Key for encrypting sensitive memories (urlsafe base64, 32 bytes).
+    # Required in staging and production; a fixed development key is used otherwise.
+    sensitive_data_key: SecretStr | None = None
+
     # Observability
     otel_exporter_otlp_endpoint: str | None = None
 
@@ -67,6 +79,8 @@ class Settings(BaseSettings):
         if self.env in ("staging", "production"):
             # The dev secret has no use here, so never keep one in memory.
             self.dev_auth_secret = SecretStr("")
+            if not self.sensitive_data_key:
+                raise ValueError("SENSITIVE_DATA_KEY must be set in staging and production")
         return self
 
 

@@ -33,3 +33,16 @@ def build_gateway(settings: Settings) -> LLMGateway:
 @lru_cache
 def get_gateway() -> LLMGateway:
     return build_gateway(get_settings())
+
+
+_override: LLMGateway | None = None
+
+
+def set_gateway(gateway: LLMGateway | None) -> None:
+    """Replace the shared gateway (tests, and anything that needs a custom one)."""
+    global _override
+    _override = gateway
+
+
+def current_gateway() -> LLMGateway:
+    return _override or get_gateway()

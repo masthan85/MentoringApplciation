@@ -5,6 +5,9 @@ from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Annotated
 
+from fastapi import Depends, Request
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.config import Settings, get_settings
 from app.core.db import get_sessionmaker
 from app.core.errors import RateLimited, Unauthorized
@@ -13,8 +16,6 @@ from app.core.redis import get_redis, hit_rate_limit
 from app.core.security import Principal, TokenVerifier, build_verifier
 from app.modules.identity.models import User
 from app.modules.identity.service import get_or_provision_user
-from fastapi import Depends, Request
-from sqlalchemy.ext.asyncio import AsyncSession
 
 log = logging.getLogger(__name__)
 

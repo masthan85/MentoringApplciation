@@ -1,8 +1,9 @@
 from typing import Any
 from uuid import UUID
 
-from app.modules.audit.models import AuditEvent
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.modules.audit.models import AuditEvent
 
 
 async def record(

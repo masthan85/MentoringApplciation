@@ -6,7 +6,7 @@ from app.modules.llm_gateway.errors import (
     ProviderUnavailable,
     TransientProviderError,
 )
-from app.modules.llm_gateway.factory import build_gateway, get_gateway
+from app.modules.llm_gateway.factory import build_gateway, current_gateway, get_gateway, set_gateway
 from app.modules.llm_gateway.gateway import LLMGateway
 from app.modules.llm_gateway.types import (
     CompletionRequest,
@@ -34,5 +34,7 @@ __all__ = [
     "TransientProviderError",
     "Usage",
     "build_gateway",
+    "current_gateway",
     "get_gateway",
+    "set_gateway",
 ]

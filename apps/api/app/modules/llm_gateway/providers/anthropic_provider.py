@@ -4,6 +4,7 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 import anthropic
+
 from app.modules.llm_gateway.config import Target
 from app.modules.llm_gateway.errors import (
     InvalidRequestError,

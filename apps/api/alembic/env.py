@@ -5,6 +5,10 @@ from alembic import context
 from app.core.db import Base
 from app.modules.audit import models as _audit  # noqa: F401
 from app.modules.identity import models as _identity  # noqa: F401
+from app.modules.memory import models as _memory  # noqa: F401
+from app.modules.orchestration import models as _orchestration  # noqa: F401
+from app.modules.persona import models as _persona  # noqa: F401
+from app.modules.profile import models as _profile  # noqa: F401
 from sqlalchemy.ext.asyncio import create_async_engine
 
 target_metadata = Base.metadata

@@ -1,10 +1,11 @@
 import uuid
 from datetime import datetime
 
-from app.core.db import Base
 from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, func, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.core.db import Base
 
 
 class User(Base):

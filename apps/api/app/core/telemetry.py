@@ -1,7 +1,8 @@
 """OpenTelemetry setup. A no-op unless OTEL_EXPORTER_OTLP_ENDPOINT is set."""
 
-from app.core.config import Settings
 from fastapi import FastAPI
+
+from app.core.config import Settings
 
 
 def setup_tracing(app: FastAPI, settings: Settings) -> None:

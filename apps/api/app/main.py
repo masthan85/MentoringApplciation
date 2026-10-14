@@ -4,16 +4,25 @@ import uuid
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 
+from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.core.config import Settings, get_settings
 from app.core.db import dispose_engine
 from app.core.errors import RateLimited, register_error_handlers
 from app.core.health import router as health_router
+from app.core.jobs import close_pool
 from app.core.logging import bind_log_context, clear_log_context, configure_logging
 from app.core.redis import close_redis, get_redis, hit_rate_limit
 from app.core.telemetry import setup_tracing
 from app.modules.identity.router import router as identity_router
-from fastapi import FastAPI, Request, Response
-from fastapi.middleware.cors import CORSMiddleware
+from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
+from app.modules.memory.router import router as memory_router
+from app.modules.orchestration import jobs as _orchestration_jobs  # noqa: F401  (registers jobs)
+from app.modules.orchestration.router import router as conversations_router
+from app.modules.persona.registry import get_registry
+from app.modules.persona.router import router as persona_router
+from app.modules.profile.router import router as profile_router
 
 log = logging.getLogger("app.request")
 
@@ -26,10 +35,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+        get_registry()  # fail fast if a mentor pack is invalid
         log.info("starting", extra={"env": settings.env})
         yield
         await dispose_engine()
         await close_redis()
+        await close_pool()
 
     app = FastAPI(
         title="Adaptive AI Mentoring Platform",
@@ -81,6 +92,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     register_error_handlers(app)
     app.include_router(health_router)
     app.include_router(identity_router)
+    app.include_router(profile_router)
+    app.include_router(persona_router)
+    app.include_router(conversations_router)
+    app.include_router(memory_router)
+    if settings.auth_mode == "dev":
+        from app.modules.identity.dev import router as dev_router
+
+        app.include_router(dev_router)
     setup_tracing(app, settings)
     return app
 

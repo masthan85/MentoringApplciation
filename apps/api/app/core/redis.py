@@ -2,8 +2,9 @@
 
 import time
 
-from app.core.config import get_settings
 from redis.asyncio import Redis
+
+from app.core.config import get_settings
 
 _client: Redis | None = None
 

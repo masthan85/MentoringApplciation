@@ -1,0 +1,10 @@
+{
+  "classifier.v1.md": "3ea748d74f684d6cdca53219ca9215e6744db0507acc81039fbd62dd53b3496e",
+  "conversation_summary.v1.md": "421739c01362f964ad06baff1eff64e5c908efff6795e0dab5ba5b59f7ed8873",
+  "memory_extraction.v1.md": "6b5e30d4b4ff2b5671dcb83b71b859d786d8d1761dfa104684cdea69106a49dd",
+  "mentor_core.v1.md": "2ab62e3d55f30ef2774a7850e2c0b92b6282f0d4c60a749dc4871dded4eb8462",
+  "onboarding.v1.md": "d0ebcd67528f7c492ef0503db9df3496ff1925f02be68d8ca2cff55c67eb6d95",
+  "profile_extraction.v1.md": "f5cb1253f1906c9839c3911c99c5985066a00cb7c7da5d1cd7de731a47ddbff4",
+  "safety_policy.v1.md": "57bcf0bb3e9ba92cedb307acc4764cfbbd51fe335b801a14c90f8cfb09520f01",
+  "voice_basic.v1.md": "05b882b53f15809af0960a1a77498f8a9e19a9d24ecff28333a2482f06665668"
+}

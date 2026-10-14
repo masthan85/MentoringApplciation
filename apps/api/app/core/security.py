@@ -12,6 +12,7 @@ from typing import Any, Protocol
 
 import httpx
 import jwt
+
 from app.core.config import Settings
 from app.core.errors import Unauthorized
 

@@ -1,9 +1,10 @@
 import logging
 
-from app.core.db import get_engine
-from app.core.redis import get_redis
 from fastapi import APIRouter, Response
 from sqlalchemy import text
+
+from app.core.db import get_engine
+from app.core.redis import get_redis
 
 log = logging.getLogger(__name__)
 router = APIRouter(tags=["health"])

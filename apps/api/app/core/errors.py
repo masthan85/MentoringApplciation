@@ -1,5 +1,6 @@
 """Application errors, rendered as RFC 9457 problem details."""
 
+import json
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -60,8 +61,10 @@ def register_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def _validation(request: Request, exc: RequestValidationError) -> JSONResponse:
+        # Validators that raise ValueError put the exception object in the error context.
+        errors = json.loads(json.dumps(exc.errors(), default=str))
         return _problem(
-            422, "validation_error", "Request validation failed", request, errors=exc.errors()
+            422, "validation_error", "Request validation failed", request, errors=errors
         )
 
     @app.exception_handler(StarletteHTTPException)
