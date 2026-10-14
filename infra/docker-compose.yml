@@ -10,6 +10,7 @@ x-python-env: &python-env
   REDIS_URL: redis://redis:6379/0
   CORS_ORIGINS: '["http://localhost:3000"]'
   # Set real keys in .env to use real models; without them the mock provider answers.
+  JOBS_MODE: arq
   LLM_DEFAULT_PROVIDER: ${LLM_DEFAULT_PROVIDER:-mock}
   ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
   OPENAI_API_KEY: ${OPENAI_API_KEY:-}

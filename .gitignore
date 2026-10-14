@@ -26,3 +26,8 @@ next-env.d.ts
 # Local state
 .data/
 .DS_Store
+
+# Playwright
+test-results/
+playwright-report/
+dump.rdb

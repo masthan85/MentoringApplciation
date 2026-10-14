@@ -13,6 +13,7 @@ RUN uv sync --frozen --all-packages --no-dev --no-install-workspace
 
 COPY apps/api apps/api
 COPY apps/worker apps/worker
+COPY packs packs
 RUN uv sync --frozen --all-packages --no-dev
 
 FROM python:3.12-slim

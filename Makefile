@@ -1,4 +1,4 @@
-.PHONY: setup db api worker web test lint format openapi up down
+.PHONY: setup db api worker web test e2e lint format openapi up down
 
 setup:           ## Install Python and web dependencies
 	uv sync --all-packages --python 3.12
@@ -21,6 +21,9 @@ web:             ## Run the web app
 test:            ## Run all Python tests (needs Postgres and the roles from `make db`)
 	cd apps/api && uv run pytest -q
 	cd apps/worker && uv run pytest -q
+
+e2e:             ## Browser tests (needs Postgres, Redis and `make db`)
+	npm --prefix apps/web run test:e2e
 
 lint:            ## Lint and type-check everything
 	uv run ruff check .

@@ -6,7 +6,7 @@ The product definition is `docs/BUILD_SPEC.md`, and the build follows it phase b
 
 ## Status
 
-Phase 0 (foundations) is built. The core mentoring loop is Phase 1.
+Phases 0 (foundations) and 1 (core mentoring loop) are built. Knowledge, voice and the Mentor Encyclopedia are Phase 2.
 
 | Area | State |
 |---|---|
@@ -17,7 +17,12 @@ Phase 0 (foundations) is built. The core mentoring loop is Phase 1.
 | Worker (Arq) with a smoke job | Done |
 | Web app (Next.js) with a status page and a typed API client | Done |
 | Docker Compose, CI, ADRs | Done |
-| Profile, personas, orchestration, memory (Phase 1) | Not started |
+| Profile, onboarding conversation, editable profile card | Done |
+| Mentor packs (3 packs, 7 lenses) and persona selection | Done, content needs expert review |
+| Turn pipeline with streaming, routing, safety rules, fixed crisis and refusal replies | Done, crisis wording is a draft |
+| Typed memory with extraction, review page, export and delete; consent-gated encrypted sensitive items | Done |
+| Chat, onboarding and notes screens | Done |
+| Encyclopedia, retrieval, Natural Voice, Writing Fingerprint (Phase 2) | Not started |
 
 ## Run it
 
@@ -43,6 +48,7 @@ Copy `.env.example` to `.env` to change settings. To call a real model, set `LLM
 
     make test      # Python tests (API and worker)
     make lint      # ruff, mypy (strict), eslint, tsc
+    make e2e       # Playwright, against a real browser, the API and the web build
 
 The API tests run against a real Postgres, as the same non-owner role the app uses at runtime, because the row-level security rules are part of what is being tested.
 
