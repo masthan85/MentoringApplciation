@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     auth_algorithms: list[str] = Field(default_factory=lambda: ["RS256"])
     auth_admin_claim: str = "roles"
     auth_admin_role: str = "admin"
+    # Development sign-in only: these emails get the admin role from /v1/dev/login.
+    dev_admin_emails: list[str] = Field(default_factory=list)
     dev_auth_secret: SecretStr = SecretStr("dev-only-secret-change-me-0123456789abcdef")
 
     # LLM gateway. Keys come from the environment only.

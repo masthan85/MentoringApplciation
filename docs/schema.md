@@ -48,6 +48,16 @@ Typed durable facts: `type` (goal_context, decision, commitment, achievement, pr
 
 All of these tables enable row-level security with a policy on `user_id` and grant the runtime role SELECT, INSERT, UPDATE and DELETE.
 
+## sources and chunks (the Mentor Encyclopedia)
+
+Shared, not per user. A source has a `slug`, `title`, `url`, `publisher`, `authority_tier` (official, standard, peer_reviewed, expert_authored, community), `volatility` (stable, moderate, volatile), `domain`, `subtopic`, `jurisdiction`, `licence`, `reviewer`, `published_date`, `last_reviewed`, `status` (draft, active, retired), `content_hash`, `chunk_count` and `review_flags`. A chunk holds the text, its heading path, a token estimate, the domain, an `embedding vector(1536)` (nullable) and a generated `tsv` column. Indexes: HNSW on the embedding (cosine), GIN on `tsv`, and a unique `(source_id, ordinal)`.
+
+Row-level security: `status = 'active'` rows are readable by everyone; everything else, and all writes, need `app_is_admin()`.
+
+## writing_samples, style_profiles, drafts, feedback
+
+`writing_samples` stores text the user wrote, encrypted, with its channel, word count and origin (`user_provided` or `draft_edit`). `style_profiles` holds one row per user: the stylometric features per channel and overall, the generated voice cards, an optional user-written override, and the sample count. `drafts` holds Studio drafts with their lint report, similarity and metadata. `feedback` holds thumbs and "doesn't sound like me" signals against a message or a draft. All four are private to the user by row-level security.
+
 ## Planned (not yet created)
 
-Goals, milestones, commitments, check-ins, reviews, writing samples and style profiles, sources and chunks (HNSW and GIN indexes), mentor relationships, sessions and briefs, feedback, evaluation runs, subscriptions.
+Goals, milestones, commitments, check-ins and reviews (Phase 3); mentor relationships, sessions and briefs, evaluation runs, subscriptions (Phases 3 and 4).

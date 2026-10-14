@@ -90,3 +90,23 @@ async def test_unknown_route_is_a_problem_document(client: httpx.AsyncClient) ->
     response = await client.get("/nope")
     assert response.status_code == 404
     assert response.headers["content-type"].startswith("application/problem+json")
+
+
+async def test_dev_login_grants_admin_only_to_listed_emails(
+    client: httpx.AsyncClient, settings: object
+) -> None:
+    from app.core.config import get_settings
+
+    get_settings().dev_admin_emails.append("boss@example.com")
+    try:
+        boss = (await client.post("/v1/dev/login", json={"email": "Boss@Example.com"})).json()
+        other = (await client.post("/v1/dev/login", json={"email": "someone@example.com"})).json()
+    finally:
+        get_settings().dev_admin_emails.remove("boss@example.com")
+    admin_me = await client.get(
+        "/v1/me", headers={"Authorization": f"Bearer {boss['access_token']}"}
+    )
+    user_me = await client.get(
+        "/v1/me", headers={"Authorization": f"Bearer {other['access_token']}"}
+    )
+    assert admin_me.json()["is_admin"] is True and user_me.json()["is_admin"] is False

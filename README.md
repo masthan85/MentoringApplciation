@@ -6,7 +6,7 @@ The product definition is `docs/BUILD_SPEC.md`, and the build follows it phase b
 
 ## Status
 
-Phases 0 (foundations) and 1 (core mentoring loop) are built. Knowledge, voice and the Mentor Encyclopedia are Phase 2.
+Phases 0 (foundations), 1 (core mentoring loop) and 2 (knowledge and voice) are built. Goals, check-ins and the evaluation runner are Phase 3.
 
 | Area | State |
 |---|---|
@@ -22,7 +22,10 @@ Phases 0 (foundations) and 1 (core mentoring loop) are built. Knowledge, voice a
 | Turn pipeline with streaming, routing, safety rules, fixed crisis and refusal replies | Done, crisis wording is a draft |
 | Typed memory with extraction, review page, export and delete; consent-gated encrypted sensitive items | Done |
 | Chat, onboarding and notes screens | Done |
-| Encyclopedia, retrieval, Natural Voice, Writing Fingerprint (Phase 2) | Not started |
+| Mentor Encyclopedia: ingestion, hybrid retrieval, citations, admin page | Done; starter content is unreviewed drafts |
+| Natural Voice: lint, targeted rewrite, preservation check | Done |
+| Writing Fingerprint and Studio drafting | Done |
+| Goals, commitments, check-ins, quarterly reviews, evaluation runner (Phase 3) | Not started |
 
 ## Run it
 
@@ -42,7 +45,7 @@ Without Docker:
     make worker    # terminal 2
     make web       # terminal 3
 
-Copy `.env.example` to `.env` to change settings. To call a real model, set `LLM_DEFAULT_PROVIDER=anthropic` and `ANTHROPIC_API_KEY`.
+Load the starter encyclopedia with `make seed` (it needs the database and migrations; set `OPENAI_API_KEY` to embed the content, or it is searched by full text only). Copy `.env.example` to `.env` to change settings. To call a real model, set `LLM_DEFAULT_PROVIDER=anthropic` and `ANTHROPIC_API_KEY`.
 
 ## Checks
 

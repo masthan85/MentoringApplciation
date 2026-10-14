@@ -18,13 +18,13 @@ class DevLogin(BaseModel):
 @router.post("/login")
 async def dev_login(body: DevLogin) -> dict[str, str]:
     settings = get_settings()
-    token = jwt.encode(
-        {
-            "sub": f"dev|{body.email.lower()}",
-            "email": body.email.lower(),
-            "exp": int(time.time()) + 12 * 3600,
-        },
-        settings.dev_auth_secret.get_secret_value(),
-        algorithm="HS256",
-    )
+    email = body.email.lower()
+    claims: dict[str, object] = {
+        "sub": f"dev|{email}",
+        "email": email,
+        "exp": int(time.time()) + 12 * 3600,
+    }
+    if email in {e.lower() for e in settings.dev_admin_emails}:
+        claims[settings.auth_admin_claim] = [settings.auth_admin_role]
+    token = jwt.encode(claims, settings.dev_auth_secret.get_secret_value(), algorithm="HS256")
     return {"access_token": token, "token_type": "bearer"}
