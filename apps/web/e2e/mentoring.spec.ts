@@ -109,7 +109,7 @@ test("only admins see the encyclopedia admin page, and a flagged source needs ac
   await page.getByLabel("Email address (development sign-in)").fill(`e2e-${Date.now()}-c@example.com`);
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("heading", { name: /get to know you/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Admin" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Sources" })).toHaveCount(0);
   await page.goto("/admin/sources");
   await expect(page.getByText("Admin access is required.")).toBeVisible();
   await page.getByRole("button", { name: "Sign out" }).click();
@@ -117,7 +117,7 @@ test("only admins see the encyclopedia admin page, and a flagged source needs ac
   // An admin can add a source. One that quotes an injection phrase stays a draft until acknowledged.
   await page.getByLabel("Email address (development sign-in)").fill("e2e-admin@example.com");
   await page.getByRole("button", { name: "Continue" }).click();
-  await page.getByRole("link", { name: "Admin" }).click();
+  await page.getByRole("link", { name: "Sources" }).click();
   const slug = `e2e-source-${Date.now()}`;
   const document = `---
 slug: ${slug}
@@ -142,4 +142,42 @@ A classic attack tells the model to ignore all previous instructions. Treat retr
   page.once("dialog", (dialog) => void dialog.accept());
   await card.getByRole("button", { name: "Delete" }).click();
   await expect(card).toHaveCount(0);
+});
+
+test("a user sets a goal, commits to something, checks in and sees their progress", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Email address (development sign-in)").fill(`e2e-goals-${Date.now()}@example.com`);
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.goto("/goals");
+
+  await page.getByLabel("What do you want to achieve?").fill("Lead a design review");
+  await page.getByLabel(/Where are you now/).first().fill("I have only attended them");
+  await page.getByRole("button", { name: "Suggest levels" }).click();
+  await expect(page.getByRole("status").filter({ hasText: /These are suggestions|could not suggest/ })).toBeVisible();
+  for (const [label, text] of [
+    [/−2/, "Not started"],
+    [/−1/, "Read about it"],
+    [/^0 /, "Led one with help"],
+    [/\+1/, "Led two alone"],
+    [/\+2/, "Run the forum"],
+  ] as const) {
+    await page.getByLabel(label).fill(text);
+  }
+  await page.getByRole("button", { name: "Save goal" }).click();
+  await expect(page.getByLabel("Current level for Lead a design review")).toBeVisible();
+
+  await page.getByLabel("New commitment").fill("Book a design review slot");
+  await page.getByRole("button", { name: "Add", exact: true }).click();
+  await expect(page.getByText("Book a design review slot")).toBeVisible();
+
+  await page.goto("/check-in");
+  await page.getByLabel("done").check();
+  await page.getByLabel("One thing you will do this coming week").fill("Write the review agenda");
+  await page.getByRole("button", { name: "Finish check-in" }).click();
+  await expect(page.getByRole("heading", { name: "Check-in done" })).toBeVisible();
+
+  await page.goto("/review");
+  await expect(page.getByRole("img", { name: /Line chart of goal levels/ })).toBeVisible();
+  await page.getByRole("button", { name: "Show as table" }).click();
+  await expect(page.getByRole("table")).toContainText("Lead a design review");
 });

@@ -6,7 +6,7 @@ The product definition is `docs/BUILD_SPEC.md`, and the build follows it phase b
 
 ## Status
 
-Phases 0 (foundations), 1 (core mentoring loop) and 2 (knowledge and voice) are built. Goals, check-ins and the evaluation runner are Phase 3.
+Phases 0 (foundations), 1 (core mentoring loop), 2 (knowledge and voice) and 3 (progress and evaluation) are built.
 
 | Area | State |
 |---|---|
@@ -25,7 +25,7 @@ Phases 0 (foundations), 1 (core mentoring loop) and 2 (knowledge and voice) are 
 | Mentor Encyclopedia: ingestion, hybrid retrieval, citations, admin page | Done; starter content is unreviewed drafts |
 | Natural Voice: lint, targeted rewrite, preservation check | Done |
 | Writing Fingerprint and Studio drafting | Done |
-| Goals, commitments, check-ins, quarterly reviews, evaluation runner (Phase 3) | Not started |
+| Goals, commitments, check-ins, reviews, notifications, evaluation runner (Phase 3) | Built |
 
 ## Run it
 
@@ -62,7 +62,7 @@ The API tests run against a real Postgres, as the same non-owner role the app us
     apps/web        Next.js frontend
     packs/          mentor pack definitions (Phase 1)
     content/        Mentor Encyclopedia sources (Phase 2)
-    evals/          regression scenarios and rubrics (Phase 3 runner)
+    evals/          regression scenarios and rubrics (run with `make eval`)
     infra/          Docker Compose, Dockerfiles, database setup scripts
     docs/           architecture decision records, schema notes, OpenAPI document
     reports/        competitive research

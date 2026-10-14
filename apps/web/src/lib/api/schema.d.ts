@@ -44,6 +44,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/evals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Runs */
+        get: operations["list_runs_v1_admin_evals_get"];
+        put?: never;
+        /** Start Run */
+        post: operations["start_run_v1_admin_evals_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/evals/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Run */
+        get: operations["read_run_v1_admin_evals__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/packs": {
         parameters: {
             query?: never;
@@ -115,6 +150,110 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/baseline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Baseline */
+        post: operations["baseline_v1_baseline_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/check-ins/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Current Check In */
+        get: operations["current_check_in_v1_check_ins_current_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/check-ins/{check_in_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete Check In */
+        post: operations["complete_check_in_v1_check_ins__check_in_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/check-ins/{check_in_id}/skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Skip Check In */
+        post: operations["skip_check_in_v1_check_ins__check_in_id__skip_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/commitments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Commitments */
+        get: operations["list_commitments_v1_commitments_get"];
+        put?: never;
+        /** Create Commitment */
+        post: operations["create_commitment_v1_commitments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/commitments/{commitment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Commitment */
+        delete: operations["delete_commitment_v1_commitments__commitment_id__delete"];
+        options?: never;
+        head?: never;
+        /** Patch Commitment */
+        patch: operations["patch_commitment_v1_commitments__commitment_id__patch"];
         trace?: never;
     };
     "/v1/consents": {
@@ -238,6 +377,93 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/goals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Goals */
+        get: operations["list_goals_v1_goals_get"];
+        put?: never;
+        /** Create Goal */
+        post: operations["create_goal_v1_goals_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/goals/suggest-levels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Suggest Levels */
+        post: operations["suggest_levels_v1_goals_suggest_levels_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/goals/{goal_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Goal */
+        delete: operations["delete_goal_v1_goals__goal_id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Goal */
+        patch: operations["update_goal_v1_goals__goal_id__patch"];
+        trace?: never;
+    };
+    "/v1/goals/{goal_id}/milestones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Milestone */
+        post: operations["add_milestone_v1_goals__goal_id__milestones_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/goals/{goal_id}/scores": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Score Goal */
+        post: operations["score_goal_v1_goals__goal_id__scores_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me": {
         parameters: {
             query?: never;
@@ -325,6 +551,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/milestones/{milestone_id}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Milestone Done */
+        post: operations["milestone_done_v1_milestones__milestone_id__done_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Notifications */
+        get: operations["list_notifications_v1_notifications_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/notifications/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read All */
+        post: operations["read_all_v1_notifications_read_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/notifications/{notification_id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read One */
+        post: operations["read_one_v1_notifications__notification_id__read_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/personas": {
         parameters: {
             query?: never;
@@ -371,6 +665,74 @@ export interface paths {
         get: operations["read_profile_v1_profile_get"];
         /** Update Profile */
         put: operations["update_profile_v1_profile_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Reviews */
+        get: operations["list_reviews_v1_reviews_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reviews/quarterly": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit Quarterly */
+        post: operations["submit_quarterly_v1_reviews_quarterly_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reviews/quarterly/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Quarterly Status */
+        get: operations["quarterly_status_v1_reviews_quarterly_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/reviews/trends": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Trends */
+        get: operations["read_trends_v1_reviews_trends_get"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -488,6 +850,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Today */
+        get: operations["read_today_v1_today_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/writing-samples": {
         parameters: {
             query?: never;
@@ -552,12 +931,119 @@ export interface components {
             /** Weights */
             weights: number[];
         };
+        /** BaselineIn */
+        BaselineIn: {
+            /** Self Efficacy */
+            self_efficacy: number;
+        };
+        /** CheckInComplete */
+        CheckInComplete: {
+            /** Blockers */
+            blockers?: string | null;
+            next_commitment?: components["schemas"]["NextCommitment"] | null;
+            /** Updates */
+            updates?: components["schemas"]["CommitmentUpdate"][];
+        };
+        /** CheckInOut */
+        CheckInOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Open Commitments
+             * @default []
+             */
+            open_commitments: components["schemas"]["CommitmentOut"][];
+            /** Reply */
+            reply?: string | null;
+            /** Safety Message */
+            safety_message?: string | null;
+            /** Status */
+            status: string;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
+        };
         /** ChunkOut */
         ChunkOut: {
             /** Heading Path */
             heading_path: string;
             /** Text */
             text: string;
+        };
+        /** CommitmentIn */
+        CommitmentIn: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Goal Id */
+            goal_id?: string | null;
+            /** Milestone Id */
+            milestone_id?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** CommitmentOut */
+        CommitmentOut: {
+            /** Completed At */
+            completed_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Due Date */
+            due_date: string | null;
+            /** Evidence Note */
+            evidence_note: string | null;
+            /** Evidence Url */
+            evidence_url: string | null;
+            /** Goal Id */
+            goal_id: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Milestone Id */
+            milestone_id: string | null;
+            /** Source */
+            source: string;
+            /** Status */
+            status: string;
+            /** Title */
+            title: string;
+        };
+        /** CommitmentPatch */
+        CommitmentPatch: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Evidence Note */
+            evidence_note?: string | null;
+            /** Evidence Url */
+            evidence_url?: string | null;
+            /** Status */
+            status?: ("open" | "done" | "partial" | "missed" | "dropped") | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** CommitmentUpdate */
+        CommitmentUpdate: {
+            /**
+             * Commitment Id
+             * Format: uuid
+             */
+            commitment_id: string;
+            /** Note */
+            note?: string | null;
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "done" | "partial" | "missed" | "dropped";
         };
         /** ConsentIn */
         ConsentIn: {
@@ -719,6 +1205,89 @@ export interface components {
             /** Note */
             note?: string | null;
         };
+        /**
+         * GasLevels
+         * @description The five Goal Attainment Scaling levels, from much worse to much better than expected.
+         */
+        GasLevels: {
+            /** Minus One */
+            minus_one: string;
+            /** Minus Two */
+            minus_two: string;
+            /** Plus One */
+            plus_one: string;
+            /** Plus Two */
+            plus_two: string;
+            /** Zero */
+            zero: string;
+        };
+        /** GoalCreate */
+        GoalCreate: {
+            /** Baseline */
+            baseline?: string | null;
+            /**
+             * Baseline Score
+             * @default -1
+             */
+            baseline_score: number;
+            /** Description */
+            description?: string | null;
+            levels: components["schemas"]["GasLevels"];
+            /** Target Date */
+            target_date?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** GoalOut */
+        GoalOut: {
+            /** Baseline */
+            baseline: string | null;
+            /** Baseline Score */
+            baseline_score: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Current Level Text */
+            current_level_text: string;
+            /** Current Score */
+            current_score: number;
+            /** Description */
+            description: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Levels */
+            levels: {
+                [key: string]: string;
+            };
+            /**
+             * Milestones
+             * @default []
+             */
+            milestones: components["schemas"]["MilestoneOut"][];
+            /** Status */
+            status: string;
+            /** Target Date */
+            target_date: string | null;
+            /** Title */
+            title: string;
+        };
+        /** GoalUpdate */
+        GoalUpdate: {
+            /** Description */
+            description?: string | null;
+            levels?: components["schemas"]["GasLevels"] | null;
+            /** Status */
+            status?: ("active" | "achieved" | "paused" | "dropped") | null;
+            /** Target Date */
+            target_date?: string | null;
+            /** Title */
+            title?: string | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -842,6 +1411,71 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        /** MilestoneIn */
+        MilestoneIn: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** MilestoneOut */
+        MilestoneOut: {
+            /** Due Date */
+            due_date: string | null;
+            /**
+             * Goal Id
+             * Format: uuid
+             */
+            goal_id: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Title */
+            title: string;
+        };
+        /** NextCommitment */
+        NextCommitment: {
+            /** Due Date */
+            due_date?: string | null;
+            /** Goal Id */
+            goal_id?: string | null;
+            /** Title */
+            title: string;
+        };
+        /** NotificationList */
+        NotificationList: {
+            /** Items */
+            items: components["schemas"]["NotificationOut"][];
+            /** Unread */
+            unread: number;
+        };
+        /** NotificationOut */
+        NotificationOut: {
+            /** Body */
+            body: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Link */
+            link: string | null;
+            /** Read At */
+            read_at: string | null;
+            /** Title */
+            title: string;
+        };
         /**
          * OnboardingStatus
          * @enum {string}
@@ -851,6 +1485,11 @@ export interface components {
         ProfileOut: {
             /** Current Challenge */
             current_challenge: string | null;
+            /**
+             * Email Reminders
+             * @default false
+             */
+            email_reminders: boolean;
             /** English Variant */
             english_variant: string;
             /** Goals Summary */
@@ -881,6 +1520,8 @@ export interface components {
             confirm_onboarding: boolean;
             /** Current Challenge */
             current_challenge?: string | null;
+            /** Email Reminders */
+            email_reminders?: boolean | null;
             /** English Variant */
             english_variant?: string | null;
             /** Goals Summary */
@@ -896,11 +1537,129 @@ export interface components {
             /** Years Experience */
             years_experience?: number | null;
         };
+        /** QuarterlyIn */
+        QuarterlyIn: {
+            /** Gas Scores */
+            gas_scores: {
+                [key: string]: number;
+            };
+            /** Reflection */
+            reflection?: string | null;
+            /** Self Efficacy */
+            self_efficacy: number[];
+            /** Working Alliance */
+            working_alliance: number[];
+        };
+        /** ReviewOut */
+        ReviewOut: {
+            /** Content */
+            content: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /**
+             * Period End
+             * Format: date
+             */
+            period_end: string;
+            /**
+             * Period Start
+             * Format: date
+             */
+            period_start: string;
+            /** Scores */
+            scores: {
+                [key: string]: unknown;
+            };
+        };
         /**
          * RoleFamily
          * @enum {string}
          */
         RoleFamily: "data_engineer" | "data_architect" | "analytics_engineer" | "ml_ai_engineer" | "software_engineer" | "tech_lead" | "engineering_manager" | "other";
+        /** RunDetail */
+        RunDetail: {
+            /** Environment */
+            environment: {
+                [key: string]: unknown;
+            };
+            /** Finished At */
+            finished_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Label */
+            label: string;
+            /** Mode */
+            mode: string;
+            /** Results */
+            results: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Status */
+            status: string;
+            /** Summary */
+            summary: {
+                [key: string]: unknown;
+            };
+        };
+        /** RunIn */
+        RunIn: {
+            /**
+             * Label
+             * @default manual run
+             */
+            label: string;
+            /**
+             * Mode
+             * @default smoke
+             * @enum {string}
+             */
+            mode: "smoke" | "full";
+            /** Packs */
+            packs?: string[] | null;
+        };
+        /** RunOut */
+        RunOut: {
+            /** Finished At */
+            finished_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Label */
+            label: string;
+            /** Mode */
+            mode: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Status */
+            status: string;
+            /** Summary */
+            summary: {
+                [key: string]: unknown;
+            };
+        };
         /** SampleIn */
         SampleIn: {
             /** Channel */
@@ -933,6 +1692,13 @@ export interface components {
             preview: string;
             /** Word Count */
             word_count: number;
+        };
+        /** ScoreIn */
+        ScoreIn: {
+            /** Note */
+            note?: string | null;
+            /** Score */
+            score: number;
         };
         /**
          * Seniority
@@ -1090,6 +1856,15 @@ export interface components {
                 [key: string]: string;
             };
         };
+        /** SuggestIn */
+        SuggestIn: {
+            /** Baseline */
+            baseline?: string | null;
+            /** Target */
+            target?: string | null;
+            /** Title */
+            title: string;
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -1157,6 +1932,90 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    list_runs_v1_admin_evals_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunOut"][];
+                };
+            };
+        };
+    };
+    start_run_v1_admin_evals_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_run_v1_admin_evals__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1320,6 +2179,255 @@ export interface operations {
                     "application/json": {
                         [key: string]: string;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    baseline_v1_baseline_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BaselineIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    current_check_in_v1_check_ins_current_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckInOut"];
+                };
+            };
+        };
+    };
+    complete_check_in_v1_check_ins__check_in_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                check_in_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckInComplete"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckInOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    skip_check_in_v1_check_ins__check_in_id__skip_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                check_in_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckInOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_commitments_v1_commitments_get: {
+        parameters: {
+            query?: {
+                status?: ("proposed" | "open" | "done" | "partial" | "missed" | "dropped") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommitmentOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_commitment_v1_commitments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommitmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommitmentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_commitment_v1_commitments__commitment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commitment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patch_commitment_v1_commitments__commitment_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commitment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommitmentPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommitmentOut"];
                 };
             };
             /** @description Validation Error */
@@ -1610,6 +2718,237 @@ export interface operations {
             };
         };
     };
+    list_goals_v1_goals_get: {
+        parameters: {
+            query?: {
+                include_inactive?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GoalOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_goal_v1_goals_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GoalCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GoalOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    suggest_levels_v1_goals_suggest_levels_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SuggestIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GasLevels"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_goal_v1_goals__goal_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                goal_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_goal_v1_goals__goal_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                goal_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GoalUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GoalOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_milestone_v1_goals__goal_id__milestones_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                goal_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MilestoneIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MilestoneOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    score_goal_v1_goals__goal_id__scores_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                goal_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScoreIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GoalOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     read_me_v1_me_get: {
         parameters: {
             query?: never;
@@ -1822,6 +3161,114 @@ export interface operations {
             };
         };
     };
+    milestone_done_v1_milestones__milestone_id__done_post: {
+        parameters: {
+            query?: {
+                done?: boolean;
+            };
+            header?: never;
+            path: {
+                milestone_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MilestoneOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_notifications_v1_notifications_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationList"];
+                };
+            };
+        };
+    };
+    read_all_v1_notifications_read_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+        };
+    };
+    read_one_v1_notifications__notification_id__read_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_lenses_v1_personas_get: {
         parameters: {
             query?: never;
@@ -1944,6 +3391,114 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_reviews_v1_reviews_get: {
+        parameters: {
+            query?: {
+                kind?: ("baseline" | "monthly" | "quarterly") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_quarterly_v1_reviews_quarterly_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuarterlyIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    quarterly_status_v1_reviews_quarterly_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    read_trends_v1_reviews_trends_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -2169,6 +3724,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_today_v1_today_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };

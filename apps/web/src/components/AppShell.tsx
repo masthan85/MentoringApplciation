@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { api, installAuth } from "@/lib/browser-api";
+import { NotificationBell } from "@/components/NotificationBell";
 import { getToken, signOut } from "@/lib/session";
 
 const links = [
+  { href: "/today", label: "Today" },
   { href: "/chat", label: "Mentor" },
   { href: "/studio", label: "Studio" },
   { href: "/notes", label: "My notes" },
@@ -37,7 +39,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     })();
   }, [router]);
 
-  const visible = isAdmin ? [...links, { href: "/admin/sources", label: "Admin" }] : links;
+  const visible = isAdmin ? [...links, { href: "/admin/sources", label: "Sources" }, { href: "/admin/evals", label: "Evals" }] : links;
 
   if (!signedIn) return null;
 
@@ -56,6 +58,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
+        <div className="flex items-center gap-4">
+          <NotificationBell />
         <button
           className="text-sm"
           style={{ color: "var(--muted)" }}
@@ -66,6 +70,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         >
           Sign out
         </button>
+        </div>
       </header>
       <main id="main" className="flex-1 pb-8">
         {children}

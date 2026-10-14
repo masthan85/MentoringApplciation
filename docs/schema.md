@@ -58,6 +58,20 @@ Row-level security: `status = 'active'` rows are readable by everyone; everythin
 
 `writing_samples` stores text the user wrote, encrypted, with its channel, word count and origin (`user_provided` or `draft_edit`). `style_profiles` holds one row per user: the stylometric features per channel and overall, the generated voice cards, an optional user-written override, and the sample count. `drafts` holds Studio drafts with their lint report, similarity and metadata. `feedback` holds thumbs and "doesn't sound like me" signals against a message or a draft. All four are private to the user by row-level security.
 
+## goals, goal_scores, milestones, commitments
+
+A goal has a title, a baseline description, `gas_levels` (the five level texts keyed -2 to 2), `baseline_score`, `current_score`, a status and an optional target date. Every score change adds a `goal_scores` row (score, note, source). Milestones belong to a goal. Commitments have a title, optional due date, optional goal or milestone, a status (open, done, partial, missed, dropped), optional evidence and a `source` (user, check-in, chat). All are private by row-level security.
+
+## check_ins, reviews, notifications
+
+`check_ins` has one row per user per week (`week_start`, unique), a status (due, completed, skipped), the outcomes and the reply. `reviews` has a `kind` (baseline, monthly, quarterly), the period, `scores` JSON and generated or written content. `notifications` has a kind, title, body, link, `read_at` and a unique `dedupe_key` per user. `profiles.email_reminders` is the opt-in for reminder emails.
+
+## eval_runs
+
+Admin-only. A run has a label, mode, status, a summary, per-scenario results and the environment it ran in.
+
+Two SECURITY DEFINER functions support background work: `scheduler_user_ids()` and `delete_eval_users()`.
+
 ## Planned (not yet created)
 
-Goals, milestones, commitments, check-ins and reviews (Phase 3); mentor relationships, sessions and briefs, evaluation runs, subscriptions (Phases 3 and 4).
+Mentor relationships, sessions and briefs, practice sessions, subscriptions, audit views (Phase 4).

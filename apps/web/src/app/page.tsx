@@ -19,7 +19,7 @@ export default function Home() {
   async function route() {
     installAuth();
     const { data } = await api.GET("/v1/profile");
-    router.replace(data?.onboarding_status === "complete" ? "/chat" : "/onboarding");
+    router.replace(data?.onboarding_status === "complete" ? "/today" : "/onboarding");
   }
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Home() {
     void (async () => {
       installAuth();
       const { data } = await api.GET("/v1/profile");
-      if (data) router.replace(data.onboarding_status === "complete" ? "/chat" : "/onboarding");
+      if (data) router.replace(data.onboarding_status === "complete" ? "/today" : "/onboarding");
       else setChecking(false);
     })().catch(() => setChecking(false));
   }, [router]);
