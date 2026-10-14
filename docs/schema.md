@@ -72,6 +72,18 @@ Admin-only. A run has a label, mode, status, a summary, per-scenario results and
 
 Two SECURITY DEFINER functions support background work: `scheduler_user_ids()` and `delete_eval_users()`.
 
-## Planned (not yet created)
+## mentor_links, mentor_briefs, session_notes
 
-Mentor relationships, sessions and briefs, practice sessions, subscriptions, audit views (Phase 4).
+A link joins a mentee to a mentor email, with a hashed invitation token, sharing `scopes`, a status (invited, active, ended) and an expiry. Briefs hold edited JSON sections and a status (draft, approved). Session notes are written by mentors and read by both sides. Mentees control links and briefs through row-level security; mentors read approved briefs and write notes only through the `mentor_view_brief` and `mentor_add_session_note` functions, which also write audit events. `mentor_accept_invite` accepts an invitation.
+
+## practice_sessions
+
+One per rehearsal: the scenario, the user's own description of the situation, the linked conversation (kind `practice`), a status and the debrief JSON.
+
+## subscriptions, stripe_events
+
+`subscriptions` has one row per user (plan free, mentor or mentor_human, status, Stripe ids, period end). Users can read their own; only admin-context code (the webhook) writes. `stripe_events` records processed event ids so a replay does nothing.
+
+## audit_events
+
+Append-only for the runtime role. Users read their own; admins read all. `delete_own_account()` removes a user and cascades; the audit trail keeps the event with no user id.

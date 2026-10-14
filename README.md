@@ -6,7 +6,7 @@ The product definition is `docs/BUILD_SPEC.md`, and the build follows it phase b
 
 ## Status
 
-Phases 0 (foundations), 1 (core mentoring loop), 2 (knowledge and voice) and 3 (progress and evaluation) are built.
+Phases 0 to 4 are built: foundations, the core mentoring loop, knowledge and voice, progress and evaluation, and hybrid mentoring with launch readiness. See `docs/deployment.md` before putting it in front of real users.
 
 | Area | State |
 |---|---|
@@ -25,7 +25,13 @@ Phases 0 (foundations), 1 (core mentoring loop), 2 (knowledge and voice) and 3 (
 | Mentor Encyclopedia: ingestion, hybrid retrieval, citations, admin page | Done; starter content is unreviewed drafts |
 | Natural Voice: lint, targeted rewrite, preservation check | Done |
 | Writing Fingerprint and Studio drafting | Done |
-| Goals, commitments, check-ins, reviews, notifications, evaluation runner (Phase 3) | Built |
+| Goals, commitments, check-ins, reviews, notifications, evaluation runner | Done; 63 scenarios, not 50 per pack |
+| Human mentor links, approved briefs, session notes, proposed actions | Done |
+| Practice sessions (mock interview, salary, difficult one-to-one, design defence) | Done |
+| Stripe plans and entitlements | Done, untested against real Stripe; off by default |
+| Export, account deletion, access log, admin audit | Done |
+| Security headers, body limits, log redaction, upload gate | Done; no upload route exists yet |
+| Azure Bicep and deployment guide | Written, never compiled or deployed |
 
 ## Run it
 
