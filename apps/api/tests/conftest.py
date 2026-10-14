@@ -174,6 +174,15 @@ class Script:
             "plus_two": "Ran the architecture forum",
         }
     )
+    debrief: dict[str, Any] = field(
+        default_factory=lambda: {
+            "summary": "A steady start.",
+            "strengths": ["You gave a specific example when asked."],
+            "improvements": ["State the ask earlier."],
+            "stronger_phrases": ["I would like us to agree a date to review this."],
+            "next_step": "Rehearse your opening sentence.",
+        }
+    )
     rewrites: list[dict[str, Any]] = field(default_factory=list)
     entailed: bool = True
     entail_added: list[str] = field(default_factory=list)
@@ -184,6 +193,8 @@ class Script:
             return json.dumps(self.classifier)
         if "memories" in props:
             return json.dumps({"memories": self.memories})
+        if "stronger_phrases" in props:
+            return json.dumps(self.debrief)
         if "minus_two" in props:
             return json.dumps(self.gas)
         if "rewrites" in props:

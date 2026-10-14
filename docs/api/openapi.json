@@ -1,6 +1,57 @@
 {
   "components": {
     "schemas": {
+      "AcceptIn": {
+        "properties": {
+          "token": {
+            "maxLength": 200,
+            "minLength": 20,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "AcceptIn",
+        "type": "object"
+      },
+      "AccessEntry": {
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "by": {
+            "title": "By",
+            "type": "string"
+          },
+          "resource_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Type"
+          }
+        },
+        "required": [
+          "at",
+          "action",
+          "by",
+          "resource_type"
+        ],
+        "title": "AccessEntry",
+        "type": "object"
+      },
       "ActiveIn": {
         "properties": {
           "lens_ids": {
@@ -76,6 +127,73 @@
         "title": "ActiveOut",
         "type": "object"
       },
+      "AdminAuditEntry": {
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "actor_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Id"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          },
+          "resource_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Type"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          }
+        },
+        "required": [
+          "at",
+          "user_id",
+          "actor_id",
+          "action",
+          "resource_type",
+          "resource_id"
+        ],
+        "title": "AdminAuditEntry",
+        "type": "object"
+      },
       "BaselineIn": {
         "properties": {
           "self_efficacy": {
@@ -89,6 +207,151 @@
           "self_efficacy"
         ],
         "title": "BaselineIn",
+        "type": "object"
+      },
+      "BillingOut": {
+        "properties": {
+          "billing_enabled": {
+            "title": "Billing Enabled",
+            "type": "boolean"
+          },
+          "can_manage": {
+            "title": "Can Manage",
+            "type": "boolean"
+          },
+          "daily_turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Turns"
+          },
+          "features": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Features",
+            "type": "object"
+          },
+          "plan": {
+            "title": "Plan",
+            "type": "string"
+          },
+          "plan_name": {
+            "title": "Plan Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "billing_enabled",
+          "plan",
+          "plan_name",
+          "daily_turns",
+          "features",
+          "can_manage"
+        ],
+        "title": "BillingOut",
+        "type": "object"
+      },
+      "BriefBody": {
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/BriefContent"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "title": "BriefBody",
+        "type": "object"
+      },
+      "BriefContent": {
+        "properties": {
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/BriefSection"
+            },
+            "maxItems": 12,
+            "title": "Sections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "sections"
+        ],
+        "title": "BriefContent",
+        "type": "object"
+      },
+      "BriefOut": {
+        "properties": {
+          "approved_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved At"
+          },
+          "content": {
+            "$ref": "#/components/schemas/BriefContent"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "link_id": {
+            "format": "uuid",
+            "title": "Link Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "link_id",
+          "status",
+          "content",
+          "approved_at",
+          "updated_at"
+        ],
+        "title": "BriefOut",
+        "type": "object"
+      },
+      "BriefSection": {
+        "properties": {
+          "text": {
+            "maxLength": 3000,
+            "title": "Text",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "text"
+        ],
+        "title": "BriefSection",
         "type": "object"
       },
       "CheckInComplete": {
@@ -180,6 +443,23 @@
           "status"
         ],
         "title": "CheckInOut",
+        "type": "object"
+      },
+      "CheckoutIn": {
+        "properties": {
+          "plan": {
+            "enum": [
+              "mentor",
+              "mentor_human"
+            ],
+            "title": "Plan",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan"
+        ],
+        "title": "CheckoutIn",
         "type": "object"
       },
       "ChunkOut": {
@@ -606,6 +886,20 @@
           "updated_at"
         ],
         "title": "ConversationOut",
+        "type": "object"
+      },
+      "DeleteIn": {
+        "properties": {
+          "confirm": {
+            "maxLength": 60,
+            "title": "Confirm",
+            "type": "string"
+          }
+        },
+        "required": [
+          "confirm"
+        ],
+        "title": "DeleteIn",
         "type": "object"
       },
       "DevLogin": {
@@ -1264,6 +1558,89 @@
         "title": "IngestOut",
         "type": "object"
       },
+      "InviteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "mentor_email": {
+            "format": "email",
+            "title": "Mentor Email",
+            "type": "string"
+          },
+          "scopes": {
+            "$ref": "#/components/schemas/Scopes",
+            "default": {
+              "commitments": true,
+              "goals": true
+            }
+          }
+        },
+        "required": [
+          "mentor_email"
+        ],
+        "title": "InviteIn",
+        "type": "object"
+      },
+      "InviteOut": {
+        "properties": {
+          "accepted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "invite_token": {
+            "title": "Invite Token",
+            "type": "string"
+          },
+          "invite_url": {
+            "title": "Invite Url",
+            "type": "string"
+          },
+          "mentor_email": {
+            "title": "Mentor Email",
+            "type": "string"
+          },
+          "scopes": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Scopes",
+            "type": "object"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "mentor_email",
+          "status",
+          "scopes",
+          "created_at",
+          "accepted_at",
+          "invite_token",
+          "invite_url"
+        ],
+        "title": "InviteOut",
+        "type": "object"
+      },
       "LensOut": {
         "properties": {
           "domain": {
@@ -1295,6 +1672,57 @@
           "summary"
         ],
         "title": "LensOut",
+        "type": "object"
+      },
+      "LinkOut": {
+        "properties": {
+          "accepted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mentor_email": {
+            "title": "Mentor Email",
+            "type": "string"
+          },
+          "scopes": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Scopes",
+            "type": "object"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "mentor_email",
+          "status",
+          "scopes",
+          "created_at",
+          "accepted_at"
+        ],
+        "title": "LinkOut",
         "type": "object"
       },
       "MeResponse": {
@@ -1446,6 +1874,41 @@
           }
         },
         "title": "MemoryPatch",
+        "type": "object"
+      },
+      "MenteeOut": {
+        "properties": {
+          "accepted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted At"
+          },
+          "link_id": {
+            "format": "uuid",
+            "title": "Link Id",
+            "type": "string"
+          },
+          "scopes": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Scopes",
+            "type": "object"
+          }
+        },
+        "required": [
+          "link_id",
+          "accepted_at",
+          "scopes"
+        ],
+        "title": "MenteeOut",
         "type": "object"
       },
       "MessageCreate": {
@@ -1634,6 +2097,61 @@
         "title": "NextCommitment",
         "type": "object"
       },
+      "NoteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestedAction"
+            },
+            "maxItems": 10,
+            "title": "Actions",
+            "type": "array"
+          },
+          "summary": {
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary"
+        ],
+        "title": "NoteIn",
+        "type": "object"
+      },
+      "NoteOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "link_id": {
+            "format": "uuid",
+            "title": "Link Id",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "link_id",
+          "summary",
+          "created_at"
+        ],
+        "title": "NoteOut",
+        "type": "object"
+      },
       "NotificationList": {
         "properties": {
           "items": {
@@ -1730,6 +2248,60 @@
         ],
         "title": "OnboardingStatus",
         "type": "string"
+      },
+      "PracticeOut": {
+        "properties": {
+          "conversation_id": {
+            "format": "uuid",
+            "title": "Conversation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "debrief": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Debrief"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "scenario_id": {
+            "title": "Scenario Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "conversation_id",
+          "scenario_id",
+          "title",
+          "status",
+          "debrief",
+          "created_at"
+        ],
+        "title": "PracticeOut",
+        "type": "object"
       },
       "ProfileOut": {
         "properties": {
@@ -2324,6 +2896,51 @@
         "title": "SampleOut",
         "type": "object"
       },
+      "ScenarioOut": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "opening_hint": {
+            "title": "Opening Hint",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "opening_hint"
+        ],
+        "title": "ScenarioOut",
+        "type": "object"
+      },
+      "Scopes": {
+        "additionalProperties": false,
+        "properties": {
+          "commitments": {
+            "default": true,
+            "title": "Commitments",
+            "type": "boolean"
+          },
+          "goals": {
+            "default": true,
+            "title": "Goals",
+            "type": "boolean"
+          }
+        },
+        "title": "Scopes",
+        "type": "object"
+      },
       "ScoreIn": {
         "properties": {
           "note": {
@@ -2779,6 +3396,31 @@
         "title": "SourcePatch",
         "type": "object"
       },
+      "StartIn": {
+        "properties": {
+          "context": {
+            "anyOf": [
+              {
+                "maxLength": 600,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context"
+          },
+          "scenario_id": {
+            "title": "Scenario Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenario_id"
+        ],
+        "title": "StartIn",
+        "type": "object"
+      },
       "StyleProfileOut": {
         "properties": {
           "features": {
@@ -2855,6 +3497,47 @@
           "title"
         ],
         "title": "SuggestIn",
+        "type": "object"
+      },
+      "SuggestedAction": {
+        "additionalProperties": false,
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "title": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "SuggestedAction",
+        "type": "object"
+      },
+      "UrlOut": {
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "UrlOut",
         "type": "object"
       },
       "ValidationError": {
@@ -2970,6 +3653,71 @@
         "summary": "Readyz",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/v1/admin/audit": {
+      "get": {
+        "operationId": "admin_audit_v1_admin_audit_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "action",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Action"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminAuditEntry"
+                  },
+                  "title": "Response Admin Audit V1 Admin Audit Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Admin Audit",
+        "tags": [
+          "privacy"
         ]
       }
     },
@@ -3350,6 +4098,89 @@
         ]
       }
     },
+    "/v1/billing": {
+      "get": {
+        "operationId": "read_billing_v1_billing_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read Billing",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
+    "/v1/billing/checkout": {
+      "post": {
+        "operationId": "checkout_v1_billing_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Checkout",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
+    "/v1/billing/portal": {
+      "post": {
+        "operationId": "portal_v1_billing_portal_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UrlOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Portal",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
     "/v1/check-ins/current": {
       "get": {
         "operationId": "current_check_in_v1_check_ins_current_get",
@@ -3651,6 +4482,100 @@
         "summary": "Patch Commitment",
         "tags": [
           "progress"
+        ]
+      }
+    },
+    "/v1/commitments/{commitment_id}/accept": {
+      "post": {
+        "operationId": "accept_proposal_v1_commitments__commitment_id__accept_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "commitment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Commitment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Accept Proposal V1 Commitments  Commitment Id  Accept Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Accept Proposal",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/commitments/{commitment_id}/decline": {
+      "post": {
+        "operationId": "decline_proposal_v1_commitments__commitment_id__decline_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "commitment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Commitment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Decline Proposal V1 Commitments  Commitment Id  Decline Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Decline Proposal",
+        "tags": [
+          "human-mentor"
         ]
       }
     },
@@ -4669,6 +5594,460 @@
         ]
       }
     },
+    "/v1/mentor-briefs/{brief_id}": {
+      "put": {
+        "operationId": "edit_brief_v1_mentor_briefs__brief_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brief_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Brief Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BriefContent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BriefOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Edit Brief",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor-briefs/{brief_id}/approve": {
+      "post": {
+        "operationId": "approve_brief_v1_mentor_briefs__brief_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brief_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Brief Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BriefOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Brief",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor-link": {
+      "get": {
+        "operationId": "list_links_v1_mentor_link_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LinkOut"
+                  },
+                  "title": "Response List Links V1 Mentor Link Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Links",
+        "tags": [
+          "human-mentor"
+        ]
+      },
+      "post": {
+        "operationId": "invite_v1_mentor_link_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Invite",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor-link/{link_id}": {
+      "delete": {
+        "operationId": "end_link_v1_mentor_link__link_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "link_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Link Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "End Link",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor-link/{link_id}/briefs": {
+      "get": {
+        "operationId": "list_briefs_v1_mentor_link__link_id__briefs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "link_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Link Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BriefOut"
+                  },
+                  "title": "Response List Briefs V1 Mentor Link  Link Id  Briefs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Briefs",
+        "tags": [
+          "human-mentor"
+        ]
+      },
+      "post": {
+        "operationId": "create_brief_v1_mentor_link__link_id__briefs_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "link_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Link Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BriefOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Brief",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor/accept": {
+      "post": {
+        "operationId": "accept_invite_v1_mentor_accept_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Accept Invite V1 Mentor Accept Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Accept Invite",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor/mentees": {
+      "get": {
+        "operationId": "my_mentees_v1_mentor_mentees_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MenteeOut"
+                  },
+                  "title": "Response My Mentees V1 Mentor Mentees Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "My Mentees",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor/mentees/{link_id}/brief": {
+      "get": {
+        "operationId": "view_brief_v1_mentor_mentees__link_id__brief_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "link_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Link Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BriefBody"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "View Brief",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
+    "/v1/mentor/mentees/{link_id}/notes": {
+      "post": {
+        "operationId": "add_note_v1_mentor_mentees__link_id__notes_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "link_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Link Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Add Note V1 Mentor Mentees  Link Id  Notes Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Note",
+        "tags": [
+          "human-mentor"
+        ]
+      }
+    },
     "/v1/milestones/{milestone_id}/done": {
       "post": {
         "operationId": "milestone_done_v1_milestones__milestone_id__done_post",
@@ -4900,6 +6279,216 @@
         ]
       }
     },
+    "/v1/practice": {
+      "get": {
+        "operationId": "list_practice_v1_practice_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PracticeOut"
+                  },
+                  "title": "Response List Practice V1 Practice Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Practice",
+        "tags": [
+          "practice"
+        ]
+      },
+      "post": {
+        "operationId": "start_v1_practice_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Start",
+        "tags": [
+          "practice"
+        ]
+      }
+    },
+    "/v1/practice/scenarios": {
+      "get": {
+        "operationId": "list_scenarios_v1_practice_scenarios_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioOut"
+                  },
+                  "title": "Response List Scenarios V1 Practice Scenarios Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Scenarios",
+        "tags": [
+          "practice"
+        ]
+      }
+    },
+    "/v1/practice/{practice_id}/finish": {
+      "post": {
+        "operationId": "finish_v1_practice__practice_id__finish_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "practice_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Practice Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracticeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finish",
+        "tags": [
+          "practice"
+        ]
+      }
+    },
+    "/v1/privacy/access-log": {
+      "get": {
+        "operationId": "access_log_v1_privacy_access_log_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AccessEntry"
+                  },
+                  "title": "Response Access Log V1 Privacy Access Log Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Access Log",
+        "tags": [
+          "privacy"
+        ]
+      }
+    },
+    "/v1/privacy/delete-account": {
+      "post": {
+        "operationId": "delete_account_v1_privacy_delete_account_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Account",
+        "tags": [
+          "privacy"
+        ]
+      }
+    },
+    "/v1/privacy/export": {
+      "get": {
+        "operationId": "export_everything_v1_privacy_export_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Export Everything",
+        "tags": [
+          "privacy"
+        ]
+      }
+    },
     "/v1/profile": {
       "get": {
         "operationId": "read_profile_v1_profile_get",
@@ -5102,6 +6691,31 @@
         "summary": "Read Trends",
         "tags": [
           "progress"
+        ]
+      }
+    },
+    "/v1/session-notes": {
+      "get": {
+        "operationId": "session_notes_v1_session_notes_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NoteOut"
+                  },
+                  "title": "Response Session Notes V1 Session Notes Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Session Notes",
+        "tags": [
+          "human-mentor"
         ]
       }
     },

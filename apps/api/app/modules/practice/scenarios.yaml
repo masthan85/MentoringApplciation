@@ -1,0 +1,26 @@
+# Practice scenarios. The counterpart is always a generic person in a role, never a named real one.
+scenarios:
+  - id: mock_interview
+    title: Mock interview
+    summary: A structured interview for a role you are aiming at.
+    counterpart: "an interviewer at a mid-sized technology company, asking a mix of experience, technical judgement and behavioural questions, one at a time"
+    opening_hint: "Say what role you are interviewing for and how senior it is."
+    focus: "clear structure in answers, specific evidence, honest handling of gaps"
+  - id: salary_conversation
+    title: Salary or promotion conversation
+    summary: Ask your manager for a pay rise or a promotion.
+    counterpart: "a fair but budget-conscious line manager who has limited time and needs a case they can take to their own boss"
+    opening_hint: "Say what you want to ask for and the evidence you have."
+    focus: "evidence over entitlement, a specific ask, handling a no or a not-yet"
+  - id: difficult_one_to_one
+    title: Difficult one-to-one
+    summary: Give hard feedback, or have a tough conversation with a colleague or report.
+    counterpart: "a capable colleague who becomes defensive when the problem is raised, but who can be reached with a clear, specific and respectful approach"
+    opening_hint: "Describe the situation and what you need to get across."
+    focus: "specific observations, impact, listening, agreeing next steps"
+  - id: architecture_review
+    title: Architecture review defence
+    summary: Defend a design decision to sceptical senior engineers.
+    counterpart: "a sceptical principal engineer who probes trade-offs, failure modes, cost and operational burden"
+    opening_hint: "Summarise the decision, the options you rejected and why."
+    focus: "trade-offs, evidence, admitting uncertainty, simplicity"

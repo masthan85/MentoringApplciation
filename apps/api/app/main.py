@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import Settings, get_settings
 from app.core.db import dispose_engine
 from app.core.errors import RateLimited, register_error_handlers
+from app.core.hardening import SecurityMiddleware
 from app.core.health import router as health_router
 from app.core.jobs import close_pool
 from app.core.logging import bind_log_context, clear_log_context, configure_logging
@@ -26,14 +27,18 @@ from app.modules.goals.router import router as goals_router
 from app.modules.identity.router import router as identity_router
 from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
 from app.modules.memory.router import router as memory_router
+from app.modules.mentors.router import router as human_mentor_router
 from app.modules.notifications import scheduler as _scheduler  # noqa: F401  (registers jobs)
 from app.modules.notifications.router import router as notifications_router
 from app.modules.orchestration import jobs as _orchestration_jobs  # noqa: F401  (registers jobs)
 from app.modules.orchestration.router import router as conversations_router
 from app.modules.persona.registry import get_registry
 from app.modules.persona.router import router as persona_router
+from app.modules.practice.router import router as practice_router
+from app.modules.privacy.router import router as privacy_router
 from app.modules.profile.router import router as profile_router
 from app.modules.studio.router import router as studio_router
+from app.modules.subscriptions.router import router as billing_router
 
 log = logging.getLogger("app.request")
 
@@ -66,6 +71,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+
+    app.add_middleware(
+        SecurityMiddleware,
+        max_body_bytes=settings.max_body_bytes,
+        hsts=settings.env in ("staging", "production"),
     )
 
     @app.middleware("http")
@@ -115,6 +126,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(goals_router)
     app.include_router(notifications_router)
     app.include_router(admin_router)
+    app.include_router(human_mentor_router)
+    app.include_router(practice_router)
+    app.include_router(privacy_router)
+    app.include_router(billing_router)
     if settings.auth_mode == "dev":
         from app.modules.identity.dev import router as dev_router
 

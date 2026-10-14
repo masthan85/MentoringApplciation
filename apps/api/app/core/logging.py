@@ -2,6 +2,7 @@
 
 import json
 import logging
+import re
 import sys
 from contextvars import ContextVar
 from datetime import UTC, datetime
@@ -10,6 +11,18 @@ from typing import Any
 _context: ContextVar[dict[str, Any] | None] = ContextVar("log_context", default=None)
 
 _RESERVED = set(logging.LogRecord("", 0, "", 0, "", (), None).__dict__) | {"message", "asctime"}
+
+
+_EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+_LONG_NUMBER = re.compile(r"\b\d{9,}\b")
+_BEARER = re.compile(r"(?i)\bbearer\s+[\w.~+/=-]{10,}")
+
+
+def redact(value: str) -> str:
+    """Strip things that identify a person from log text: emails, long numbers and bearer tokens."""
+    value = _BEARER.sub("Bearer [token]", value)
+    value = _EMAIL.sub("[email]", value)
+    return _LONG_NUMBER.sub("[number]", value)
 
 
 def bind_log_context(**values: Any) -> None:
@@ -31,14 +44,14 @@ class JsonFormatter(logging.Formatter):
             "level": record.levelname.lower(),
             "service": self._service,
             "logger": record.name,
-            "message": record.getMessage(),
+            "message": redact(record.getMessage()),
         }
         payload.update(_context.get() or {})
         for key, value in record.__dict__.items():
             if key not in _RESERVED and not key.startswith("_"):
-                payload[key] = value
+                payload[key] = redact(value) if isinstance(value, str) else value
         if record.exc_info:
-            payload["exception"] = self.formatException(record.exc_info)
+            payload["exception"] = redact(self.formatException(record.exc_info))
         return json.dumps(payload, default=str)
 
 

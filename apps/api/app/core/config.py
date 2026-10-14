@@ -70,6 +70,17 @@ class Settings(BaseSettings):
     email_from: str = "Mentor <no-reply@mentor.example>"
     public_web_url: str = "http://localhost:3000"
 
+    # Billing. Off by default: with billing disabled every signed-in user has every feature.
+    billing_enabled: bool = False
+    stripe_secret_key: SecretStr | None = None
+    stripe_webhook_secret: SecretStr | None = None
+    stripe_price_mentor: str | None = None
+    stripe_price_mentor_human: str | None = None
+    free_daily_turns: int = 20
+
+    # Largest request body accepted, in bytes. Uploads have their own, larger limit.
+    max_body_bytes: int = 1_000_000
+
     # Observability
     otel_exporter_otlp_endpoint: str | None = None
 
@@ -91,6 +102,16 @@ class Settings(BaseSettings):
                 raise ValueError(
                     f"AUTH_MODE=oidc needs {', '.join(m.upper() for m in missing)} to be set"
                 )
+        if self.billing_enabled and not (
+            self.stripe_secret_key
+            and self.stripe_webhook_secret
+            and self.stripe_price_mentor
+            and self.stripe_price_mentor_human
+        ):
+            raise ValueError(
+                "BILLING_ENABLED needs STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, "
+                "STRIPE_PRICE_MENTOR and STRIPE_PRICE_MENTOR_HUMAN"
+            )
         if self.env in ("staging", "production"):
             # The dev secret has no use here, so never keep one in memory.
             self.dev_auth_secret = SecretStr("")

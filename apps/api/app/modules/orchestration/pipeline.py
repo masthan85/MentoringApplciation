@@ -43,7 +43,12 @@ from app.modules.memory.service import list_memories
 from app.modules.orchestration import jobs as orchestration_jobs
 from app.modules.orchestration import onboarding, service
 from app.modules.orchestration.classifier import Preprocess, classify
-from app.modules.orchestration.context import PromptBundle, build_mentoring_prompt
+from app.modules.orchestration.context import (
+    PromptBundle,
+    approx_tokens,
+    build_mentoring_prompt,
+    trim_history,
+)
 from app.modules.orchestration.models import Conversation
 from app.modules.orchestration.routing import FixedReply, ModelRoute, combine_risk, decide
 from app.modules.orchestration.sse import sse
@@ -51,11 +56,13 @@ from app.modules.persona import service as persona_service
 from app.modules.persona.assembly import render_persona_section
 from app.modules.persona.registry import PackRegistry
 from app.modules.persona.selection import ActivePersona
+from app.modules.practice import service as practice_service
 from app.modules.profile.models import Profile
 from app.modules.profile.service import get_or_create_profile, missing_fields
 from app.modules.safety import Risk, check_output, scan
 from app.modules.voice.card import build_voice_card
 from app.modules.voice.lint import lint_text
+from app.prompts import registry as prompts
 
 log = logging.getLogger("app.pipeline")
 HISTORY_LOAD = 16
@@ -124,6 +131,11 @@ async def run_turn(
         summary = conversation.rolling_summary
         total_messages = await service.count_messages(session, conversation_id)
         summarised = conversation.summarised_message_count
+        practice = (
+            await practice_service.for_conversation(session, conversation_id)
+            if kind == "practice"
+            else None
+        )
 
     rule_hit = scan(text)
     crisis_by_rule = rule_hit is not None and rule_hit.risk is Risk.CRISIS
@@ -204,7 +216,7 @@ async def run_turn(
 
     assert isinstance(decision, ModelRoute)
     source_block: SourceBlock | None = None
-    if pre.needs_retrieval and kind != "onboarding":
+    if pre.needs_retrieval and kind not in ("onboarding", "practice"):
         source_block = await _retrieve_sources(user_id, text, retrieval_domains)
     async with session_scope(user_id) as session:
         profile_row = await get_or_create_profile(session, await _user(session, user_id))
@@ -220,6 +232,7 @@ async def run_turn(
             source_block,
             pre,
             last_lint_failures,
+            practice,
         )
 
     observe_prompt(bundle.system)
@@ -271,7 +284,7 @@ async def run_turn(
             user_message=text,
             baseline_cv=context.fingerprint.baseline_cv,
         )
-        if kind != "onboarding"
+        if kind not in ("onboarding", "practice")
         else None
     )
     meta = {
@@ -311,13 +324,14 @@ async def run_turn(
     if kind == "onboarding":
         done["profile"] = await _profile_card(user_id)
 
-    await enqueue(
-        "extract_memories",
-        user_id=str(user_id),
-        conversation_id=str(conversation_id),
-        user_message_id=str(user_message_id),
-        assistant_message_id=str(assistant_id),
-    )
+    if kind != "practice":  # a rehearsal is not what the user actually thinks or has done
+        await enqueue(
+            "extract_memories",
+            user_id=str(user_id),
+            conversation_id=str(conversation_id),
+            user_message_id=str(user_message_id),
+            assistant_message_id=str(assistant_id),
+        )
     if orchestration_jobs.needs_summary(total_messages + 1, summarised):
         await enqueue(
             "summarise_conversation", user_id=str(user_id), conversation_id=str(conversation_id)
@@ -395,9 +409,22 @@ def _assemble(
     source_block: SourceBlock | None,
     pre: Preprocess,
     last_lint_failures: list[str],
+    practice: Any = None,
 ) -> PromptBundle:
     if kind == "onboarding":
         return onboarding.build_onboarding_prompt(profile, history)
+    if kind == "practice" and practice is not None:
+        system = practice_service.build_practice_system(
+            practice_service.get_scenario(practice.scenario_id), practice.context
+        )
+        return PromptBundle(
+            system=system,
+            messages=trim_history(history),
+            section_tokens={"practice": approx_tokens(system)},
+            prompt_versions={
+                "practice_roleplay": prompts.version_label(*practice_service.ROLEPLAY)
+            },
+        )
     return build_mentoring_prompt(
         persona_section=render_persona_section(persona, context.seniority, registry),
         profile=context.profile,

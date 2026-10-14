@@ -10,6 +10,7 @@ from app.core.deps import RequestCtx
 from app.modules.orchestration import service
 from app.modules.orchestration.pipeline import run_turn
 from app.modules.persona.registry import PackRegistry, get_registry
+from app.modules.subscriptions.entitlements import check_daily_turns
 
 router = APIRouter(prefix="/v1/conversations", tags=["conversations"])
 Registry = Annotated[PackRegistry, Depends(get_registry)]
@@ -98,7 +99,9 @@ async def send_message(
     conversation_id: uuid.UUID, body: MessageCreate, ctx: RequestCtx, registry: Registry
 ) -> StreamingResponse:
     # Checked here so that a bad id is a proper 404, not a broken stream.
-    await service.get_conversation(ctx.session, ctx.user.id, conversation_id)
+    conversation = await service.get_conversation(ctx.session, ctx.user.id, conversation_id)
+    if conversation.kind != "onboarding":
+        await check_daily_turns(ctx.session, ctx.user.id)
     return StreamingResponse(
         run_turn(
             user_id=ctx.user.id,

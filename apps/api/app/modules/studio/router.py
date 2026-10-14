@@ -7,12 +7,14 @@ from app.core.deps import RequestCtx
 from app.modules.studio import service
 from app.modules.studio.models import Draft
 from app.modules.studio.schemas import DraftOut, DraftRequest, EditIn, EditOut
+from app.modules.subscriptions.entitlements import require_feature
 
 router = APIRouter(prefix="/v1/studio", tags=["studio"])
 
 
 @router.post("/drafts", response_model=DraftOut)
 async def create_draft(body: DraftRequest, ctx: RequestCtx) -> DraftOut:
+    await require_feature(ctx.session, ctx.user.id, "studio")
     return await service.create_draft(ctx.session, ctx.user, body)
 
 
