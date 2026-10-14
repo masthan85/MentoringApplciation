@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --all-packages --frozen --python 3.12
+      - name: Create roles and databases
+        run: |
+          psql -f infra/postgres/01-roles.sql
+          bash infra/postgres/02-databases.sh
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+        working-directory: apps/api
+      - run: uv run mypy
+        working-directory: apps/worker
+      - run: uv run pytest -q
+        working-directory: apps/api
+      - run: uv run pytest -q
+        working-directory: apps/worker
+      - name: OpenAPI document is up to date
+        working-directory: apps/api
+        run: |
+          uv run python scripts/export_openapi.py
+          git diff --exit-code ../../docs/api/openapi.json
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - name: API types are up to date
+        run: |
+          npm run gen:api
+          git diff --exit-code src/lib/api/schema.d.ts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
