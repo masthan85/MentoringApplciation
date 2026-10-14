@@ -1,4 +1,4 @@
-.PHONY: setup db api worker web test e2e lint format openapi up down
+.PHONY: setup db api worker web test e2e lint format openapi seed up down
 
 setup:           ## Install Python and web dependencies
 	uv sync --all-packages --python 3.12
@@ -40,6 +40,9 @@ format:
 openapi:         ## Regenerate the OpenAPI document and the typed web client
 	cd apps/api && uv run python scripts/export_openapi.py
 	npm --prefix apps/web run gen:api
+
+seed:            ## Load the starter encyclopedia content (add --activate in the script to serve it)
+	cd apps/api && uv run python scripts/ingest_content.py --activate
 
 up:              ## Start the whole stack in Docker
 	docker compose -f infra/docker-compose.yml up --build
