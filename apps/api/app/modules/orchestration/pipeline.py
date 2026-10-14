@@ -25,8 +25,10 @@ from app.modules.encyclopedia.prompt import (
 )
 from app.modules.encyclopedia.prompt import NOTHING_FOUND, SourceBlock, build_source_block
 from app.modules.encyclopedia.retrieval import retrieve
+from app.modules.evaluation.observe import observe_prompt
 from app.modules.fingerprint import service as fingerprint_service
 from app.modules.fingerprint.service import FingerprintContext
+from app.modules.goals import service as goals_service
 from app.modules.llm_gateway import (
     CompletionRequest,
     CompletionResult,
@@ -70,6 +72,7 @@ class UserContext:
     writing_mode: str
     english_variant: str
     fingerprint: FingerprintContext
+    goals_text: str = ""
 
 
 async def _load_user_context(user_id: UUID, query: str) -> UserContext:
@@ -100,6 +103,7 @@ async def _load_user_context(user_id: UUID, query: str) -> UserContext:
             writing_mode=profile.writing_mode,
             english_variant=profile.english_variant,
             fingerprint=await fingerprint_service.context_for(session, user_id, "chat"),
+            goals_text=await goals_service.prompt_summary(session, user_id),
         )
 
 
@@ -217,6 +221,8 @@ async def run_turn(
             pre,
             last_lint_failures,
         )
+
+    observe_prompt(bundle.system)
 
     # --- Stage 3: one streamed generation ------------------------------------------------
     parts: list[str] = []
@@ -399,6 +405,7 @@ def _assemble(
         rolling_summary=summary,
         history=history,
         regulated=risk is Risk.ADJACENT_REGULATED,
+        goals_text=context.goals_text,
         voice_card=build_voice_card(
             channel="chat",
             mode=context.writing_mode,

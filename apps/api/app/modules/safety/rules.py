@@ -35,7 +35,7 @@ _CRISIS = _rx(
     r"\bwant(?:ed)? to die\b",
     r"\bdon'?t want to (?:be alive|live|wake up)\b",
     r"\bbetter off dead\b",
-    r"\b(?:hurt|harm|cut)(?:ting)? myself\b",
+    r"\b(?:hurt|harm|cut)(?:ting|ing)? myself\b",
     r"\bself[- ]?harm\b",
     r"\bno reason to (?:live|go on)\b",
     r"\b(?:going to|want to|planning to|plan to) (?:kill|hurt|shoot|stab) (?:him|her|them|someone|people|everyone)\b",

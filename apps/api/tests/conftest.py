@@ -165,6 +165,15 @@ class Script:
     )
     memories: list[dict[str, Any]] = field(default_factory=list)
     profile: dict[str, Any] = field(default_factory=dict)
+    gas: dict[str, str] = field(
+        default_factory=lambda: {
+            "minus_two": "No design work done",
+            "minus_one": "Read about design reviews",
+            "zero": "Led one design review",
+            "plus_one": "Led two design reviews",
+            "plus_two": "Ran the architecture forum",
+        }
+    )
     rewrites: list[dict[str, Any]] = field(default_factory=list)
     entailed: bool = True
     entail_added: list[str] = field(default_factory=list)
@@ -175,6 +184,8 @@ class Script:
             return json.dumps(self.classifier)
         if "memories" in props:
             return json.dumps({"memories": self.memories})
+        if "minus_two" in props:
+            return json.dumps(self.gas)
         if "rewrites" in props:
             return json.dumps({"rewrites": self.rewrites})
         if "entailed" in props:

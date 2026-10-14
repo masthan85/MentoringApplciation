@@ -13,6 +13,7 @@ from app.core.jobs import run_job
 from app.core.logging import configure_logging
 from app.modules.encyclopedia import jobs as _encyclopedia_jobs  # noqa: F401  (registers jobs)
 from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
+from app.modules.notifications.scheduler import run_scheduler
 from app.modules.orchestration import jobs as _orchestration_jobs  # noqa: F401  (registers jobs)
 from arq import cron
 from arq.connections import RedisSettings
@@ -28,6 +29,11 @@ async def ping(ctx: dict[str, Any]) -> str:
 async def run_job_entry(ctx: dict[str, Any], name: str, kwargs: dict[str, Any]) -> None:
     """Entry point for every job the API enqueues (see app.core.jobs)."""
     await run_job(name, **kwargs)
+
+
+async def scheduler_tick(ctx: dict[str, Any]) -> None:
+    """Hourly: due check-ins, reminders, monthly notes and quarterly reviews."""
+    await run_scheduler()
 
 
 async def heartbeat(ctx: dict[str, Any]) -> None:
@@ -47,7 +53,10 @@ async def on_shutdown(ctx: dict[str, Any]) -> None:
 
 class WorkerSettings:
     functions: ClassVar[list[Any]] = [ping, run_job_entry]
-    cron_jobs: ClassVar[list[Any]] = [cron(heartbeat, minute=set(range(0, 60, 15)))]
+    cron_jobs: ClassVar[list[Any]] = [
+        cron(heartbeat, minute=set(range(0, 60, 15))),
+        cron(scheduler_tick, minute={5}),
+    ]
     on_startup = on_startup
     on_shutdown = on_shutdown
     redis_settings = RedisSettings.from_dsn(get_settings().redis_url)

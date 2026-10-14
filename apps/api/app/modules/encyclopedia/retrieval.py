@@ -3,6 +3,7 @@
 import logging
 import math
 import re
+from contextvars import ContextVar
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from uuid import UUID
@@ -21,6 +22,9 @@ MAX_PER_SOURCE = 3
 # Vector hits must be at least this similar (cosine) to count. Full-text matches need no floor
 # because they already share words with the question.
 MIN_VECTOR_SIMILARITY = 0.25
+MIN_LEXICAL_COVERAGE = (
+    0.2  # a text-only match must cover at least this share of the question's keywords
+)
 AUTHORITY = {
     "official": 1.0,
     "standard": 0.95,
@@ -81,6 +85,11 @@ def or_query(query: str, limit: int = 12) -> str | None:
     return " | ".join(words) if words else None
 
 
+# Evaluation runs set this so that only their fixture sources can be retrieved, whatever else the
+# database holds. In normal operation it is empty and matches every slug.
+slug_prefix_filter: ContextVar[str] = ContextVar("slug_prefix_filter", default="")
+
+
 def _vector_literal(vector: list[float]) -> str:
     return "[" + ",".join(f"{v:.6f}" for v in vector) + "]"
 
@@ -89,6 +98,7 @@ _FILTER = """
   s.status = 'active'
   AND (s.domain = ANY(:domains) OR s.domain = 'general')
   AND s.jurisdiction = ANY(:jurisdictions)
+  AND s.slug LIKE :slug_prefix
 """
 
 _FTS_SQL = text(
@@ -133,6 +143,7 @@ async def retrieve(
         "domains": domains or ["general"],
         "jurisdictions": list(jurisdictions),
         "n": CANDIDATES,
+        "slug_prefix": slug_prefix_filter.get() + "%",
     }
     ranks: dict[UUID, float] = {}
 
@@ -141,6 +152,7 @@ async def retrieve(
         for rank, row in enumerate((await session.execute(_FTS_SQL, {**params, "tsq": tsq})).all()):
             ranks[row.id] = ranks.get(row.id, 0.0) + 1 / (RRF_K + rank + 1)
 
+    vector_hits: set[UUID] = set()
     used_vectors = False
     try:
         embedded = await current_gateway().embed([query[:2000]])
@@ -157,6 +169,7 @@ async def retrieve(
             ).all()
         ):
             ranks[row.id] = ranks.get(row.id, 0.0) + 1 / (RRF_K + rank + 1)
+            vector_hits.add(row.id)
         used_vectors = True
     except LLMError:
         log.info("embeddings unavailable; retrieving with full text only")
@@ -175,6 +188,8 @@ async def retrieve(
     scored: list[Retrieved] = []
     for cid, lex in zip(ordered, lexical, strict=True):
         row = details[cid]
+        if cid not in vector_hits and lex < MIN_LEXICAL_COVERAGE:
+            continue  # matched only on common words: better to say nothing was found
         relevance = 0.6 * (ranks[cid] / top_rrf) + 0.4 * lex
         as_of = row.last_reviewed or row.published_date
         scored.append(

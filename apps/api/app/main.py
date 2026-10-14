@@ -18,11 +18,16 @@ from app.core.telemetry import setup_tracing
 from app.modules.encyclopedia import jobs as _encyclopedia_jobs  # noqa: F401  (registers jobs)
 from app.modules.encyclopedia.admin import router as admin_router
 from app.modules.encyclopedia.router import router as sources_router
+from app.modules.evaluation import service as _eval_service  # noqa: F401  (registers jobs)
+from app.modules.evaluation.admin import router as evals_router
 from app.modules.evaluation.router import router as feedback_router
 from app.modules.fingerprint.router import router as fingerprint_router
+from app.modules.goals.router import router as goals_router
 from app.modules.identity.router import router as identity_router
 from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
 from app.modules.memory.router import router as memory_router
+from app.modules.notifications import scheduler as _scheduler  # noqa: F401  (registers jobs)
+from app.modules.notifications.router import router as notifications_router
 from app.modules.orchestration import jobs as _orchestration_jobs  # noqa: F401  (registers jobs)
 from app.modules.orchestration.router import router as conversations_router
 from app.modules.persona.registry import get_registry
@@ -106,6 +111,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(fingerprint_router)
     app.include_router(studio_router)
     app.include_router(feedback_router)
+    app.include_router(evals_router)
+    app.include_router(goals_router)
+    app.include_router(notifications_router)
     app.include_router(admin_router)
     if settings.auth_mode == "dev":
         from app.modules.identity.dev import router as dev_router

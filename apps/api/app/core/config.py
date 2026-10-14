@@ -61,6 +61,15 @@ class Settings(BaseSettings):
     # Required in staging and production; a fixed development key is used otherwise.
     sensitive_data_key: SecretStr | None = None
 
+    # Email reminders (opt-in per user). Without an SMTP host, emails are only logged.
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_username: str | None = None
+    smtp_password: SecretStr | None = None
+    smtp_starttls: bool = True
+    email_from: str = "Mentor <no-reply@mentor.example>"
+    public_web_url: str = "http://localhost:3000"
+
     # Observability
     otel_exporter_otlp_endpoint: str | None = None
 

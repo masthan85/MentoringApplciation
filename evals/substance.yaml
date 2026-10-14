@@ -1,0 +1,16 @@
+# The same question under two perspectives must produce different substance, not just different tone.
+- id: sub-01-platform-choice
+  profile: {role_family: data_architect, seniority: senior}
+  message: "We are choosing a platform for a new customer analytics product. What should we weigh?"
+  lens_a: senior-data-engineer
+  lens_b: data-architect
+- id: sub-02-ai-launch
+  profile: {role_family: ml_ai_engineer, seniority: senior}
+  message: "We want to launch an AI assistant for customers next month. What should we do first?"
+  lens_a: genai-engineer
+  lens_b: ai-risk-and-security
+- id: sub-03-team-problem
+  profile: {role_family: tech_lead, seniority: senior}
+  message: "Our best engineer wants a promotion and the team is tired. How should I handle this?"
+  lens_a: engineering-manager
+  lens_b: tech-career-coach

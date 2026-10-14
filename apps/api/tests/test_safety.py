@@ -6,6 +6,7 @@ from app.modules.safety import CRISIS_MESSAGE, Risk, check_output, refusal_messa
     "text",
     [
         "I want to kill myself",
+        "Honestly I've been having thoughts of hurting myself",
         "i've been thinking about ending my life",
         "Sometimes I think everyone would be better off dead",
         "I don't want to be alive any more",

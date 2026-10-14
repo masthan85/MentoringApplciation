@@ -19,6 +19,7 @@ class ProfileOut(BaseModel):
     current_challenge: str | None
     english_variant: str
     writing_mode: str
+    email_reminders: bool = False
     onboarding_status: OnboardingStatus
     missing_fields: list[str] = Field(default_factory=list)
 
@@ -43,6 +44,7 @@ class ProfileUpdate(BaseModel):
     ) = None
     english_variant: str | None = None
     writing_mode: str | None = None
+    email_reminders: bool | None = None
     confirm_onboarding: bool = False
 
     @field_validator("english_variant")

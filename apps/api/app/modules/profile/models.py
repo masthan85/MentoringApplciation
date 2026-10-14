@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func, text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, func, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -27,6 +27,7 @@ class Profile(Base):
     current_challenge: Mapped[str | None] = mapped_column(Text)
     english_variant: Mapped[str] = mapped_column(String(5), server_default="en-GB")
     writing_mode: Mapped[str] = mapped_column(String(30), server_default="natural_professional")
+    email_reminders: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))
     onboarding_status: Mapped[str] = mapped_column(String(20), server_default="not_started")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(

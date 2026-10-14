@@ -50,7 +50,7 @@ async def update_profile(
     if "writing_mode" in changes and changes["writing_mode"] not in writing_modes():
         raise AppError("Unknown writing mode")
     for name, value in changes.items():
-        if value is None and name not in ("job_title", "years_experience"):
+        if value is None and name not in ("job_title", "years_experience", "email_reminders"):
             continue  # required fields are cleared by sending an empty string or list
         setattr(profile, name, value.value if hasattr(value, "value") else value)
     if update.confirm_onboarding:

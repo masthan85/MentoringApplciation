@@ -76,6 +76,112 @@
         "title": "ActiveOut",
         "type": "object"
       },
+      "BaselineIn": {
+        "properties": {
+          "self_efficacy": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Self Efficacy",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "self_efficacy"
+        ],
+        "title": "BaselineIn",
+        "type": "object"
+      },
+      "CheckInComplete": {
+        "properties": {
+          "blockers": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blockers"
+          },
+          "next_commitment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NextCommitment"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updates": {
+            "items": {
+              "$ref": "#/components/schemas/CommitmentUpdate"
+            },
+            "maxItems": 30,
+            "title": "Updates",
+            "type": "array"
+          }
+        },
+        "title": "CheckInComplete",
+        "type": "object"
+      },
+      "CheckInOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "open_commitments": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/CommitmentOut"
+            },
+            "title": "Open Commitments",
+            "type": "array"
+          },
+          "reply": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reply"
+          },
+          "safety_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Safety Message"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "week_start": {
+            "format": "date",
+            "title": "Week Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "week_start",
+          "status"
+        ],
+        "title": "CheckInOut",
+        "type": "object"
+      },
       "ChunkOut": {
         "properties": {
           "heading_path": {
@@ -92,6 +198,280 @@
           "text"
         ],
         "title": "ChunkOut",
+        "type": "object"
+      },
+      "CommitmentIn": {
+        "additionalProperties": false,
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "goal_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal Id"
+          },
+          "milestone_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Milestone Id"
+          },
+          "title": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "CommitmentIn",
+        "type": "object"
+      },
+      "CommitmentOut": {
+        "properties": {
+          "completed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "evidence_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Note"
+          },
+          "evidence_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Url"
+          },
+          "goal_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "milestone_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Milestone Id"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "goal_id",
+          "milestone_id",
+          "title",
+          "due_date",
+          "status",
+          "evidence_url",
+          "evidence_note",
+          "source",
+          "created_at",
+          "completed_at"
+        ],
+        "title": "CommitmentOut",
+        "type": "object"
+      },
+      "CommitmentPatch": {
+        "additionalProperties": false,
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "evidence_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Note"
+          },
+          "evidence_url": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Url"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "open",
+                  "done",
+                  "partial",
+                  "missed",
+                  "dropped"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "minLength": 3,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "title": "CommitmentPatch",
+        "type": "object"
+      },
+      "CommitmentUpdate": {
+        "properties": {
+          "commitment_id": {
+            "format": "uuid",
+            "title": "Commitment Id",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "outcome": {
+            "enum": [
+              "done",
+              "partial",
+              "missed",
+              "dropped"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          }
+        },
+        "required": [
+          "commitment_id",
+          "outcome"
+        ],
+        "title": "CommitmentUpdate",
         "type": "object"
       },
       "ConsentIn": {
@@ -548,6 +928,283 @@
         "title": "FeedbackIn",
         "type": "object"
       },
+      "GasLevels": {
+        "additionalProperties": false,
+        "description": "The five Goal Attainment Scaling levels, from much worse to much better than expected.",
+        "properties": {
+          "minus_one": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Minus One",
+            "type": "string"
+          },
+          "minus_two": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Minus Two",
+            "type": "string"
+          },
+          "plus_one": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Plus One",
+            "type": "string"
+          },
+          "plus_two": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Plus Two",
+            "type": "string"
+          },
+          "zero": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Zero",
+            "type": "string"
+          }
+        },
+        "required": [
+          "minus_two",
+          "minus_one",
+          "zero",
+          "plus_one",
+          "plus_two"
+        ],
+        "title": "GasLevels",
+        "type": "object"
+      },
+      "GoalCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "baseline": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "baseline_score": {
+            "default": -1,
+            "maximum": 0.0,
+            "minimum": -2.0,
+            "title": "Baseline Score",
+            "type": "integer"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "levels": {
+            "$ref": "#/components/schemas/GasLevels"
+          },
+          "target_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Date"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "levels"
+        ],
+        "title": "GoalCreate",
+        "type": "object"
+      },
+      "GoalOut": {
+        "properties": {
+          "baseline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "baseline_score": {
+            "title": "Baseline Score",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_level_text": {
+            "title": "Current Level Text",
+            "type": "string"
+          },
+          "current_score": {
+            "title": "Current Score",
+            "type": "integer"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "levels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Levels",
+            "type": "object"
+          },
+          "milestones": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/MilestoneOut"
+            },
+            "title": "Milestones",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Date"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "baseline",
+          "target_date",
+          "status",
+          "levels",
+          "baseline_score",
+          "current_score",
+          "current_level_text",
+          "created_at"
+        ],
+        "title": "GoalOut",
+        "type": "object"
+      },
+      "GoalUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "levels": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GasLevels"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "active",
+                  "achieved",
+                  "paused",
+                  "dropped"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "target_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Date"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 3,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "title": "GoalUpdate",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -868,6 +1525,203 @@
         "title": "MessageOut",
         "type": "object"
       },
+      "MilestoneIn": {
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "MilestoneIn",
+        "type": "object"
+      },
+      "MilestoneOut": {
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "goal_id": {
+            "format": "uuid",
+            "title": "Goal Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "goal_id",
+          "title",
+          "due_date",
+          "status"
+        ],
+        "title": "MilestoneOut",
+        "type": "object"
+      },
+      "NextCommitment": {
+        "properties": {
+          "due_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Date"
+          },
+          "goal_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal Id"
+          },
+          "title": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "NextCommitment",
+        "type": "object"
+      },
+      "NotificationList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/NotificationOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "unread": {
+            "title": "Unread",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "unread",
+          "items"
+        ],
+        "title": "NotificationList",
+        "type": "object"
+      },
+      "NotificationOut": {
+        "properties": {
+          "body": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "read_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Read At"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "body",
+          "link",
+          "created_at",
+          "read_at"
+        ],
+        "title": "NotificationOut",
+        "type": "object"
+      },
       "OnboardingStatus": {
         "enum": [
           "not_started",
@@ -889,6 +1743,11 @@
               }
             ],
             "title": "Current Challenge"
+          },
+          "email_reminders": {
+            "default": false,
+            "title": "Email Reminders",
+            "type": "boolean"
           },
           "english_variant": {
             "title": "English Variant",
@@ -1005,6 +1864,17 @@
             ],
             "title": "Current Challenge"
           },
+          "email_reminders": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email Reminders"
+          },
           "english_variant": {
             "anyOf": [
               {
@@ -1104,6 +1974,118 @@
         "title": "ProfileUpdate",
         "type": "object"
       },
+      "QuarterlyIn": {
+        "properties": {
+          "gas_scores": {
+            "additionalProperties": {
+              "maximum": 2.0,
+              "minimum": -2.0,
+              "type": "integer"
+            },
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "title": "Gas Scores",
+            "type": "object"
+          },
+          "reflection": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reflection"
+          },
+          "self_efficacy": {
+            "items": {
+              "maximum": 5.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Self Efficacy",
+            "type": "array"
+          },
+          "working_alliance": {
+            "items": {
+              "maximum": 5.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Working Alliance",
+            "type": "array"
+          }
+        },
+        "required": [
+          "gas_scores",
+          "self_efficacy",
+          "working_alliance"
+        ],
+        "title": "QuarterlyIn",
+        "type": "object"
+      },
+      "ReviewOut": {
+        "properties": {
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "period_end": {
+            "format": "date",
+            "title": "Period End",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date",
+            "title": "Period Start",
+            "type": "string"
+          },
+          "scores": {
+            "additionalProperties": true,
+            "title": "Scores",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "period_start",
+          "period_end",
+          "content",
+          "scores",
+          "created_at"
+        ],
+        "title": "ReviewOut",
+        "type": "object"
+      },
       "RoleFamily": {
         "enum": [
           "data_engineer",
@@ -1117,6 +2099,164 @@
         ],
         "title": "RoleFamily",
         "type": "string"
+      },
+      "RunDetail": {
+        "properties": {
+          "environment": {
+            "additionalProperties": true,
+            "title": "Environment",
+            "type": "object"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "started_at": {
+            "format": "date-time",
+            "title": "Started At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "mode",
+          "status",
+          "summary",
+          "started_at",
+          "finished_at",
+          "results",
+          "environment"
+        ],
+        "title": "RunDetail",
+        "type": "object"
+      },
+      "RunIn": {
+        "properties": {
+          "label": {
+            "default": "manual run",
+            "maxLength": 120,
+            "title": "Label",
+            "type": "string"
+          },
+          "mode": {
+            "default": "smoke",
+            "enum": [
+              "smoke",
+              "full"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "packs": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Packs"
+          }
+        },
+        "title": "RunIn",
+        "type": "object"
+      },
+      "RunOut": {
+        "properties": {
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "started_at": {
+            "format": "date-time",
+            "title": "Started At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "mode",
+          "status",
+          "summary",
+          "started_at",
+          "finished_at"
+        ],
+        "title": "RunOut",
+        "type": "object"
       },
       "SampleIn": {
         "properties": {
@@ -1182,6 +2322,33 @@
           "created_at"
         ],
         "title": "SampleOut",
+        "type": "object"
+      },
+      "ScoreIn": {
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 1000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "score": {
+            "maximum": 2.0,
+            "minimum": -2.0,
+            "title": "Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "score"
+        ],
+        "title": "ScoreIn",
         "type": "object"
       },
       "Seniority": {
@@ -1651,6 +2818,45 @@
         "title": "StyleProfileOut",
         "type": "object"
       },
+      "SuggestIn": {
+        "properties": {
+          "baseline": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "SuggestIn",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -1764,6 +2970,113 @@
         "summary": "Readyz",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/v1/admin/evals": {
+      "get": {
+        "operationId": "list_runs_v1_admin_evals_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RunOut"
+                  },
+                  "title": "Response List Runs V1 Admin Evals Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Runs",
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "operationId": "start_run_v1_admin_evals_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Start Run",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/evals/{run_id}": {
+      "get": {
+        "operationId": "read_run_v1_admin_evals__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Run",
+        "tags": [
+          "admin"
         ]
       }
     },
@@ -1989,6 +3302,355 @@
         "summary": "Embed Source",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/v1/baseline": {
+      "post": {
+        "operationId": "baseline_v1_baseline_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaselineIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "title": "Response Baseline V1 Baseline Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Baseline",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/check-ins/current": {
+      "get": {
+        "operationId": "current_check_in_v1_check_ins_current_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Current Check In",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/check-ins/{check_in_id}/complete": {
+      "post": {
+        "operationId": "complete_check_in_v1_check_ins__check_in_id__complete_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "check_in_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Check In Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInComplete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Complete Check In",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/check-ins/{check_in_id}/skip": {
+      "post": {
+        "operationId": "skip_check_in_v1_check_ins__check_in_id__skip_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "check_in_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Check In Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Skip Check In",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/commitments": {
+      "get": {
+        "operationId": "list_commitments_v1_commitments_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "proposed",
+                    "open",
+                    "done",
+                    "partial",
+                    "missed",
+                    "dropped"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CommitmentOut"
+                  },
+                  "title": "Response List Commitments V1 Commitments Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Commitments",
+        "tags": [
+          "progress"
+        ]
+      },
+      "post": {
+        "operationId": "create_commitment_v1_commitments_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommitmentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitmentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Commitment",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/commitments/{commitment_id}": {
+      "delete": {
+        "operationId": "delete_commitment_v1_commitments__commitment_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "commitment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Commitment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Commitment",
+        "tags": [
+          "progress"
+        ]
+      },
+      "patch": {
+        "operationId": "patch_commitment_v1_commitments__commitment_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "commitment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Commitment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommitmentPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitmentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Commitment",
+        "tags": [
+          "progress"
         ]
       }
     },
@@ -2355,6 +4017,326 @@
         ]
       }
     },
+    "/v1/goals": {
+      "get": {
+        "operationId": "list_goals_v1_goals_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "include_inactive",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Inactive",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GoalOut"
+                  },
+                  "title": "Response List Goals V1 Goals Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Goals",
+        "tags": [
+          "progress"
+        ]
+      },
+      "post": {
+        "operationId": "create_goal_v1_goals_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoalOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Goal",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/goals/suggest-levels": {
+      "post": {
+        "operationId": "suggest_levels_v1_goals_suggest_levels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuggestIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GasLevels"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Suggest Levels",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/goals/{goal_id}": {
+      "delete": {
+        "operationId": "delete_goal_v1_goals__goal_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "goal_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Goal Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Goal",
+        "tags": [
+          "progress"
+        ]
+      },
+      "patch": {
+        "operationId": "update_goal_v1_goals__goal_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "goal_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Goal Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoalUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoalOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Goal",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/goals/{goal_id}/milestones": {
+      "post": {
+        "operationId": "add_milestone_v1_goals__goal_id__milestones_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "goal_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Goal Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MilestoneIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MilestoneOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Milestone",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/goals/{goal_id}/scores": {
+      "post": {
+        "operationId": "score_goal_v1_goals__goal_id__scores_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "goal_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Goal Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScoreIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoalOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Score Goal",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
     "/v1/me": {
       "get": {
         "operationId": "read_me_v1_me_get",
@@ -2687,6 +4669,152 @@
         ]
       }
     },
+    "/v1/milestones/{milestone_id}/done": {
+      "post": {
+        "operationId": "milestone_done_v1_milestones__milestone_id__done_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "milestone_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Milestone Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "done",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Done",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MilestoneOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Milestone Done",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/notifications": {
+      "get": {
+        "operationId": "list_notifications_v1_notifications_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Notifications",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/v1/notifications/read": {
+      "post": {
+        "operationId": "read_all_v1_notifications_read_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Read All V1 Notifications Read Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read All",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/v1/notifications/{notification_id}/read": {
+      "post": {
+        "operationId": "read_one_v1_notifications__notification_id__read_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notification_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Notification Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Read One V1 Notifications  Notification Id  Read Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read One",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
     "/v1/personas": {
       "get": {
         "operationId": "list_lenses_v1_personas_get",
@@ -2829,6 +4957,151 @@
         "summary": "Update Profile",
         "tags": [
           "profile"
+        ]
+      }
+    },
+    "/v1/reviews": {
+      "get": {
+        "operationId": "list_reviews_v1_reviews_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "baseline",
+                    "monthly",
+                    "quarterly"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReviewOut"
+                  },
+                  "title": "Response List Reviews V1 Reviews Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Reviews",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/reviews/quarterly": {
+      "post": {
+        "operationId": "submit_quarterly_v1_reviews_quarterly_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuarterlyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Submit Quarterly",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/reviews/quarterly/status": {
+      "get": {
+        "operationId": "quarterly_status_v1_reviews_quarterly_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Quarterly Status V1 Reviews Quarterly Status Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Quarterly Status",
+        "tags": [
+          "progress"
+        ]
+      }
+    },
+    "/v1/reviews/trends": {
+      "get": {
+        "operationId": "read_trends_v1_reviews_trends_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Read Trends V1 Reviews Trends Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read Trends",
+        "tags": [
+          "progress"
         ]
       }
     },
@@ -3119,6 +5392,29 @@
         "summary": "Set Voice Card",
         "tags": [
           "fingerprint"
+        ]
+      }
+    },
+    "/v1/today": {
+      "get": {
+        "operationId": "read_today_v1_today_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Read Today V1 Today Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read Today",
+        "tags": [
+          "progress"
         ]
       }
     },

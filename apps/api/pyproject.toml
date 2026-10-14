@@ -25,6 +25,7 @@ dependencies = [
   "email-validator>=2.3.0",
   "pypdf>=6.20.1",
   "pgvector>=0.5.1",
+  "tzdata>=2026.5",
 ]
 
 [dependency-groups]

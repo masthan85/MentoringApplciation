@@ -1,0 +1,48 @@
+# What a rewrite must never change. `ok` cases keep every fact; `problems` cases must be caught.
+- id: pr-01-rephrase-keeps-facts
+  before: "We moved the load to Snowflake on 12 March 2026 and it runs v2.3.1 of dbt. Cost fell from £4,200 to £3,150 (25%)."
+  after: "Since 12 March 2026 the load has run on Snowflake with v2.3.1 of dbt, and cost fell from £4,200 to £3,150 (25%)."
+  expect: ok
+- id: pr-02-number-changed
+  before: "Cost fell to £3,150 a month."
+  after: "Cost fell to £3,000 a month."
+  expect: problems
+  problem_contains: "numbers"
+- id: pr-03-version-changed
+  before: "Upgrade to v2.3.1 before the cutover."
+  after: "Upgrade to v2.3.2 before the cutover."
+  expect: problems
+  problem_contains: "versions"
+- id: pr-04-date-changed
+  before: "The cutover is on 12 March 2026."
+  after: "The cutover is on 19 March 2026."
+  expect: problems
+  problem_contains: "dates"
+- id: pr-05-url-changed
+  before: "See https://example.com/runbook for the steps."
+  after: "See https://example.com/handbook for the steps."
+  expect: problems
+  problem_contains: "urls"
+- id: pr-06-code-changed
+  before: "Run `dbt build --select tag:finance` first."
+  after: "Run `dbt build --select tag:sales` first."
+  expect: problems
+  problem_contains: "code"
+- id: pr-07-name-dropped
+  before: "We will move the jobs from Airflow to Dagster next quarter."
+  after: "We will move the jobs to a new orchestrator next quarter."
+  expect: problems
+  problem_contains: "names lost"
+- id: pr-08-name-invented
+  before: "The team will review the plan next week."
+  after: "The team will review the plan next week with Datadog dashboards."
+  expect: problems
+  problem_contains: "names added"
+- id: pr-09-number-formats-normalised
+  before: "Spend was 1,200 this month."
+  after: "This month, spend was 1200."
+  expect: ok
+- id: pr-10-sentence-start-capitals-are-not-names
+  before: "Honestly the plan is sound. Then we ship."
+  after: "The plan is sound, and then we ship."
+  expect: ok

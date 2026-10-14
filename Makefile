@@ -1,4 +1,4 @@
-.PHONY: setup db api worker web test e2e lint format openapi seed up down
+.PHONY: eval eval-full setup db api worker web test e2e lint format openapi seed up down
 
 setup:           ## Install Python and web dependencies
 	uv sync --all-packages --python 3.12
@@ -21,6 +21,12 @@ web:             ## Run the web app
 test:            ## Run all Python tests (needs Postgres and the roles from `make db`)
 	cd apps/api && uv run pytest -q
 	cd apps/worker && uv run pytest -q
+
+eval:            ## Smoke evaluation: deterministic checks, no API keys needed
+	cd apps/api && LLM_DEFAULT_PROVIDER=mock uv run python scripts/run_evals.py --mode smoke
+
+eval-full:       ## Full evaluation with real models and the judge (costs money; stores the run)
+	cd apps/api && uv run python scripts/run_evals.py --mode full --store --label "$(LABEL)"
 
 e2e:             ## Browser tests (needs Postgres, Redis and `make db`)
 	npm --prefix apps/web run test:e2e
