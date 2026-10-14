@@ -181,3 +181,70 @@ test("a user sets a goal, commits to something, checks in and sees their progres
   await page.getByRole("button", { name: "Show as table" }).click();
   await expect(page.getByRole("table")).toContainText("Lead a design review");
 });
+
+test("a user can rehearse a conversation, link a mentor and export or delete their data", async ({ page, browser }) => {
+  const menteeEmail = `e2e-mentee-${Date.now()}@example.com`;
+  const mentorEmail = `e2e-mentor-${Date.now()}@example.com`;
+
+  await page.goto("/");
+  await page.getByLabel("Email address (development sign-in)").fill(menteeEmail);
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  // Practice: choose a scenario, say a line, get feedback after two turns.
+  await page.goto("/practice");
+  await page.getByLabel(/Salary or promotion conversation/).check();
+  await page.getByRole("button", { name: "Start rehearsal" }).click();
+  await expect(page.getByText(/rehearsal with an AI/)).toBeVisible();
+  for (const line of ["Thanks for making time.", "I led the migration last quarter."]) {
+    await page.getByLabel("Message").fill(line);
+    await page.getByRole("button", { name: "Send" }).click();
+    await expect(page.getByRole("log", { name: "Conversation" }).getByText(new RegExp(`\\[mock\\] ${line.slice(0, 12)}`))).toBeVisible();
+  }
+  await page.getByRole("button", { name: "End and get feedback" }).click();
+  await expect(page.getByRole("region", { name: "Feedback" })).toBeVisible();
+
+  // Human mentor: consent, invite, accept as the mentor, approve a brief, see it as the mentor.
+  await page.goto("/notes");
+  await page.getByLabel(/Allow sharing briefs with a human mentor/).check();
+  await page.goto("/mentor-link");
+  await page.getByLabel("Their email address").fill(mentorEmail);
+  await page.getByRole("button", { name: "Create invitation" }).click();
+  const shown = await page.getByText(/Send them this link/).textContent();
+  const token = new URL(shown!.split("): ")[1]!).searchParams.get("token")!;
+
+  const mentorPage = await (await browser.newContext({ baseURL: "http://localhost:3100" })).newPage();
+  await mentorPage.goto("/");
+  await mentorPage.getByLabel("Email address (development sign-in)").fill(mentorEmail);
+  await mentorPage.getByRole("button", { name: "Continue" }).click();
+  await mentorPage.goto(`/mentor?token=${token}`);
+  await mentorPage.getByRole("button", { name: "Accept invitation" }).click();
+  await expect(mentorPage.getByRole("status")).toContainText("You are now linked");
+
+  await page.reload();
+  await page.getByRole("button", { name: "Prepare a brief" }).click();
+  await page.getByRole("button", { name: "Approve and share" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Approved" })).toBeVisible();
+
+  await mentorPage.reload();
+  await mentorPage.getByRole("button", { name: "View their approved brief" }).click();
+  await expect(mentorPage.getByText("What I would like to discuss")).toBeVisible();
+  await mentorPage.getByLabel("Session notes").fill("We agreed to work on the design review.");
+  await mentorPage.getByLabel(/Suggested actions/).fill("Write the review agenda");
+  await mentorPage.getByRole("button", { name: "Save notes" }).click();
+  await expect(mentorPage.getByRole("status").filter({ hasText: "Saved" })).toBeVisible();
+
+  // The mentee sees the notes, accepts the suggestion, and the access log shows the mentor's read.
+  await page.reload();
+  await expect(page.getByText("We agreed to work on the design review.")).toBeVisible();
+  await page.getByRole("button", { name: "Accept" }).click();
+  await page.goto("/settings");
+  await expect(page.getByText(/mentor\.brief_viewed · by someone else/)).toBeVisible();
+
+  // Deleting the account needs the phrase and signs the user out.
+  await page.getByLabel(/Type "delete my account"/).fill("nope");
+  await page.getByRole("button", { name: "Delete everything" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "To confirm" })).toBeVisible();
+  await page.getByLabel(/Type "delete my account"/).fill("delete my account");
+  await page.getByRole("button", { name: "Delete everything" }).click();
+  await expect(page).toHaveURL(/\/$/);
+});
