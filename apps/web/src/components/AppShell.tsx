@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useSyncExternalStore } from "react";
-import { installAuth } from "@/lib/browser-api";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { api, installAuth } from "@/lib/browser-api";
 import { getToken, signOut } from "@/lib/session";
 
 const links = [
   { href: "/chat", label: "Mentor" },
+  { href: "/studio", label: "Studio" },
   { href: "/notes", label: "My notes" },
 ];
 
@@ -22,10 +23,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     () => false,
   );
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     installAuth();
-    if (!getToken()) router.replace("/");
+    if (!getToken()) {
+      router.replace("/");
+      return;
+    }
+    void (async () => {
+      const { data } = await api.GET("/v1/me");
+      setIsAdmin(Boolean(data?.is_admin));
+    })();
   }, [router]);
+
+  const visible = isAdmin ? [...links, { href: "/admin/sources", label: "Admin" }] : links;
 
   if (!signedIn) return null;
 
@@ -33,7 +45,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-4">
       <header className="flex items-center justify-between py-4">
         <nav aria-label="Main" className="flex gap-4 text-sm">
-          {links.map((link) => (
+          {visible.map((link) => (
             <Link
               key={link.href}
               href={link.href}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { ProfileCard, cardKey } from "@/components/ProfileCard";
+import { WritingStyle } from "@/components/WritingStyle";
 import { api, download } from "@/lib/browser-api";
 import type { ProfileCard as Card } from "@/lib/stream";
 
@@ -167,6 +168,8 @@ function Notes() {
       </section>
 
       {card && <ProfileCard key={cardKey(card)} card={card} onSaved={(next) => setCard(next)} />}
+
+      <WritingStyle />
 
       <section aria-labelledby="consent-title">
         <h2 id="consent-title" className="mb-2 font-medium">

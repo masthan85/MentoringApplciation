@@ -6,7 +6,14 @@ import { authHeaders } from "./browser-api";
 export type TurnEvent =
   | { type: "meta"; persona: { names: string[]; lens_ids: string[]; source: string }; risk_class: string }
   | { type: "delta"; text: string }
-  | { type: "done"; assistant_message_id: string; fixed_reply?: string; profile?: ProfileCard }
+  | {
+      type: "done";
+      assistant_message_id: string;
+      fixed_reply?: string;
+      profile?: ProfileCard;
+      sources?: import("@/components/Citations").Source[];
+      as_of?: string | null;
+    }
   | { type: "error"; message: string };
 
 export type ProfileCard = {

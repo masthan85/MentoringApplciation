@@ -3,9 +3,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/browser-api";
 import { type ProfileCard, sendMessage } from "@/lib/stream";
+import { type Source, Sources, withCitations } from "./Citations";
+import { MessageFeedback } from "./MessageFeedback";
 import { PersonaPicker } from "./PersonaPicker";
 
-type Line = { id: string; role: "user" | "assistant"; content: string; error?: boolean };
+type Line = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  error?: boolean;
+  sources?: Source[];
+  asOf?: string | null;
+  persisted?: boolean;
+};
 type Noted = { id: string; content: string; type: string; sensitivity: string; status: string };
 
 export function Chat({
@@ -32,7 +42,16 @@ export function Chat({
         params: { path: { conversation_id: conversationId } },
       });
       if (data) {
-        setLines(data.messages.map((m) => ({ id: m.id, role: m.role as Line["role"], content: m.content })));
+        setLines(
+          data.messages.map((m) => ({
+            id: m.id,
+            role: m.role as Line["role"],
+            content: m.content,
+            sources: (m.sources ?? []) as unknown as Source[],
+            asOf: m.as_of ?? null,
+            persisted: true,
+          })),
+        );
       }
     })();
   }, [conversationId]);
@@ -81,6 +100,19 @@ export function Chat({
         setLines((l) => l.map((x) => (x.id === assistantId ? { ...x, content: event.message, error: true } : x)));
       }
       if (event.type === "done") {
+        setLines((l) =>
+          l.map((x) =>
+            x.id === assistantId
+              ? {
+                  ...x,
+                  id: event.assistant_message_id,
+                  persisted: true,
+                  sources: event.sources ?? [],
+                  asOf: event.as_of ?? null,
+                }
+              : x,
+          ),
+        );
         if (event.profile) onProfile?.(event.profile);
         watchForMemories(since);
       }
@@ -137,8 +169,14 @@ export function Chat({
                 color: line.error ? "#b3261e" : "inherit",
               }}
             >
-              {line.content || (busy ? "…" : "")}
+              {line.content ? withCitations(line.content) : busy ? "…" : ""}
             </p>
+            {line.role === "assistant" && line.sources && line.sources.length > 0 && (
+              <Sources sources={line.sources} asOf={line.asOf ?? null} />
+            )}
+            {line.role === "assistant" && line.persisted && !line.error && showPersona && (
+              <MessageFeedback messageId={line.id} />
+            )}
           </div>
         ))}
         <div ref={bottom} />

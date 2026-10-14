@@ -15,6 +15,7 @@ const apiEnv = {
   CORS_ORIGINS: '["http://localhost:3100"]',
   RATE_LIMIT_PER_IP: "100000",
   RATE_LIMIT_PER_USER: "100000",
+  DEV_ADMIN_EMAILS: '["e2e-admin@example.com"]',
 };
 
 export default defineConfig({

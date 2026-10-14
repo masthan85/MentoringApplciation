@@ -44,6 +44,79 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/packs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Packs */
+        get: operations["list_packs_v1_admin_packs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Sources */
+        get: operations["list_sources_v1_admin_sources_get"];
+        put?: never;
+        /** Create Source */
+        post: operations["create_source_v1_admin_sources_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/sources/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Source */
+        delete: operations["delete_source_v1_admin_sources__source_id__delete"];
+        options?: never;
+        head?: never;
+        /** Patch Source */
+        patch: operations["patch_source_v1_admin_sources__source_id__patch"];
+        trace?: never;
+    };
+    "/v1/admin/sources/{source_id}/embed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Embed Source
+         * @description Queue embedding of any chunks that do not have vectors yet.
+         */
+        post: operations["embed_source_v1_admin_sources__source_id__embed_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/consents": {
         parameters: {
             query?: never;
@@ -142,6 +215,23 @@ export interface paths {
         put?: never;
         /** Dev Login */
         post: operations["dev_login_v1_dev_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Feedback */
+        post: operations["add_feedback_v1_feedback_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -288,6 +378,151 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/sources/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Source
+         * @description An active source and its text, so a user can check what an answer relied on.
+         */
+        get: operations["read_source_v1_sources__source_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Drafts */
+        get: operations["list_drafts_v1_studio_drafts_get"];
+        put?: never;
+        /** Create Draft */
+        post: operations["create_draft_v1_studio_drafts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/drafts/{draft_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Draft */
+        get: operations["read_draft_v1_studio_drafts__draft_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/studio/drafts/{draft_id}/edit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Save Edit */
+        post: operations["save_edit_v1_studio_drafts__draft_id__edit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/style-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Style Profile */
+        get: operations["read_style_profile_v1_style_profile_get"];
+        put?: never;
+        post?: never;
+        /** Delete Style Profile */
+        delete: operations["delete_style_profile_v1_style_profile_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/style-profile/voice-card": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Voice Card
+         * @description Let the user replace the generated description of their style with their own words.
+         */
+        put: operations["set_voice_card_v1_style_profile_voice_card_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/writing-samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Samples */
+        get: operations["list_samples_v1_writing_samples_get"];
+        put?: never;
+        /** Add Sample */
+        post: operations["add_sample_v1_writing_samples_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/writing-samples/{sample_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Sample */
+        delete: operations["delete_sample_v1_writing_samples__sample_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -316,6 +551,13 @@ export interface components {
             source: string;
             /** Weights */
             weights: number[];
+        };
+        /** ChunkOut */
+        ChunkOut: {
+            /** Heading Path */
+            heading_path: string;
+            /** Text */
+            text: string;
         };
         /** ConsentIn */
         ConsentIn: {
@@ -387,10 +629,117 @@ export interface components {
              */
             email: string;
         };
+        /** DraftOut */
+        DraftOut: {
+            /**
+             * Adjusted
+             * @default false
+             */
+            adjusted: boolean;
+            /** Adjustment Note */
+            adjustment_note?: string | null;
+            /** Channel */
+            channel?: string | null;
+            /** Created At */
+            created_at?: string | null;
+            /** Id */
+            id?: string | null;
+            /** Lint */
+            lint?: {
+                [key: string]: unknown;
+            } | null;
+            /** Lint After Adjustment */
+            lint_after_adjustment?: {
+                [key: string]: unknown;
+            } | null;
+            /** Message */
+            message?: string | null;
+            /** Recipient */
+            recipient?: string | null;
+            /** Refused */
+            refused?: string | null;
+            /** Similarity */
+            similarity?: number | null;
+            /** Text */
+            text?: string | null;
+            /**
+             * Warnings
+             * @default []
+             */
+            warnings: string[];
+        };
+        /** DraftRequest */
+        DraftRequest: {
+            /**
+             * Channel
+             * @enum {string}
+             */
+            channel: "slack" | "email" | "exec_summary" | "adr" | "linkedin" | "interview_spoken";
+            /** Key Points */
+            key_points: string;
+            /**
+             * Mode
+             * @description Overrides the writing mode in the profile
+             */
+            mode?: string | null;
+            /** Purpose */
+            purpose: string;
+            /**
+             * Recipient
+             * @default other
+             * @enum {string}
+             */
+            recipient: "cto" | "executive" | "peer" | "team" | "manager" | "recruiter" | "hiring_manager" | "stakeholder" | "other";
+        };
+        /** EditIn */
+        EditIn: {
+            /** Final Text */
+            final_text: string;
+        };
+        /** EditOut */
+        EditOut: {
+            /** Learned */
+            learned: boolean;
+            /** Reason */
+            reason?: string | null;
+            /** Saved */
+            saved: boolean;
+        };
+        /** FeedbackIn */
+        FeedbackIn: {
+            /** Draft Id */
+            draft_id?: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "thumbs_up" | "thumbs_down" | "not_like_me" | "other";
+            /** Message Id */
+            message_id?: string | null;
+            /** Note */
+            note?: string | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** IngestOut */
+        IngestOut: {
+            /** Chunks */
+            chunks: number;
+            /** Embedded */
+            embedded: number;
+            /** Findings */
+            findings: string[];
+            /** Slug */
+            slug: string;
+            /** Source Id */
+            source_id: string;
+            /** Status */
+            status: string;
+            /** Unchanged */
+            unchanged: boolean;
         };
         /** LensOut */
         LensOut: {
@@ -465,6 +814,8 @@ export interface components {
         };
         /** MessageOut */
         MessageOut: {
+            /** As Of */
+            as_of?: string | null;
             /** Content */
             content: string;
             /**
@@ -483,6 +834,13 @@ export interface components {
             } | null;
             /** Role */
             role: string;
+            /**
+             * Sources
+             * @default []
+             */
+            sources: {
+                [key: string]: unknown;
+            }[];
         };
         /**
          * OnboardingStatus
@@ -543,11 +901,195 @@ export interface components {
          * @enum {string}
          */
         RoleFamily: "data_engineer" | "data_architect" | "analytics_engineer" | "ml_ai_engineer" | "software_engineer" | "tech_lead" | "engineering_manager" | "other";
+        /** SampleIn */
+        SampleIn: {
+            /** Channel */
+            channel: string;
+            /**
+             * Confirm Own
+             * @description The user confirms they wrote this text themselves.
+             */
+            confirm_own: boolean;
+            /** Text */
+            text: string;
+        };
+        /** SampleOut */
+        SampleOut: {
+            /** Channel */
+            channel: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Origin */
+            origin: string;
+            /** Preview */
+            preview: string;
+            /** Word Count */
+            word_count: number;
+        };
         /**
          * Seniority
          * @enum {string}
          */
         Seniority: "junior" | "mid" | "senior" | "lead" | "executive";
+        /**
+         * SourceCreate
+         * @description A Markdown document that starts with a front matter block, or HTML with separate metadata.
+         */
+        SourceCreate: {
+            /** Document */
+            document: string;
+            /**
+             * Kind
+             * @default markdown
+             * @enum {string}
+             */
+            kind: "markdown" | "html";
+            /** Meta */
+            meta?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** SourceDetail */
+        SourceDetail: {
+            /** Authority Tier */
+            authority_tier: string;
+            /** Chunk Count */
+            chunk_count: number;
+            /** Chunks */
+            chunks: components["schemas"]["ChunkOut"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Domain */
+            domain: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Jurisdiction */
+            jurisdiction: string;
+            /** Last Reviewed */
+            last_reviewed: string | null;
+            /** Licence */
+            licence: string;
+            /** Published Date */
+            published_date: string | null;
+            /** Publisher */
+            publisher: string | null;
+            /** Review Flags */
+            review_flags: unknown[];
+            /** Reviewer */
+            reviewer: string | null;
+            /** Slug */
+            slug: string;
+            /** Status */
+            status: string;
+            /** Subtopic */
+            subtopic: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Url */
+            url: string | null;
+            /** Volatility */
+            volatility: string;
+        };
+        /** SourceOut */
+        SourceOut: {
+            /** Authority Tier */
+            authority_tier: string;
+            /** Chunk Count */
+            chunk_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Domain */
+            domain: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Jurisdiction */
+            jurisdiction: string;
+            /** Last Reviewed */
+            last_reviewed: string | null;
+            /** Licence */
+            licence: string;
+            /** Published Date */
+            published_date: string | null;
+            /** Publisher */
+            publisher: string | null;
+            /** Review Flags */
+            review_flags: unknown[];
+            /** Reviewer */
+            reviewer: string | null;
+            /** Slug */
+            slug: string;
+            /** Status */
+            status: string;
+            /** Subtopic */
+            subtopic: string | null;
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Url */
+            url: string | null;
+            /** Volatility */
+            volatility: string;
+        };
+        /** SourcePatch */
+        SourcePatch: {
+            /**
+             * Acknowledge Flags
+             * @default false
+             */
+            acknowledge_flags: boolean;
+            /** Authority Tier */
+            authority_tier?: ("official" | "standard" | "peer_reviewed" | "expert_authored" | "community") | null;
+            /** Last Reviewed */
+            last_reviewed?: string | null;
+            /** Reviewer */
+            reviewer?: string | null;
+            /** Status */
+            status?: ("draft" | "active" | "retired") | null;
+        };
+        /** StyleProfileOut */
+        StyleProfileOut: {
+            /** Features */
+            features: {
+                [key: string]: unknown;
+            };
+            /** Sample Count */
+            sample_count: number;
+            /** Voice Card Override */
+            voice_card_override: string | null;
+            /** Voice Cards */
+            voice_cards: {
+                [key: string]: string;
+            };
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -560,6 +1102,11 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /** VoiceCardIn */
+        VoiceCardIn: {
+            /** Voice Card */
+            voice_card?: string | null;
         };
     };
     responses: never;
@@ -610,6 +1157,178 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    list_packs_v1_admin_packs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+        };
+    };
+    list_sources_v1_admin_sources_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourceOut"][];
+                };
+            };
+        };
+    };
+    create_source_v1_admin_sources_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SourceCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IngestOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_source_v1_admin_sources__source_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patch_source_v1_admin_sources__source_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SourcePatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    embed_source_v1_admin_sources__source_id__embed_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -836,6 +1555,41 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_feedback_v1_feedback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1182,6 +1936,313 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ProfileOut"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_source_v1_sources__source_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourceDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_drafts_v1_studio_drafts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"][];
+                };
+            };
+        };
+    };
+    create_draft_v1_studio_drafts_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_draft_v1_studio_drafts__draft_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_edit_v1_studio_drafts__draft_id__edit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EditIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EditOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_style_profile_v1_style_profile_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleProfileOut"];
+                };
+            };
+        };
+    };
+    delete_style_profile_v1_style_profile_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+        };
+    };
+    set_voice_card_v1_style_profile_voice_card_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoiceCardIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleProfileOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_samples_v1_writing_samples_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SampleOut"][];
+                };
+            };
+        };
+    };
+    add_sample_v1_writing_samples_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SampleIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SampleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_sample_v1_writing_samples__sample_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sample_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
