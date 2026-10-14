@@ -78,7 +78,7 @@ async def migrated_db(owner_engine: AsyncEngine) -> None:
 @pytest_asyncio.fixture
 async def db(migrated_db: None, owner_engine: AsyncEngine) -> AsyncIterator[AsyncEngine]:
     async with owner_engine.begin() as conn:
-        await conn.execute(text("TRUNCATE users CASCADE"))
+        await conn.execute(text("TRUNCATE users, sources CASCADE"))
     yield owner_engine
     await dispose_engine()
 
@@ -165,6 +165,9 @@ class Script:
     )
     memories: list[dict[str, Any]] = field(default_factory=list)
     profile: dict[str, Any] = field(default_factory=dict)
+    rewrites: list[dict[str, Any]] = field(default_factory=list)
+    entailed: bool = True
+    entail_added: list[str] = field(default_factory=list)
 
     def __call__(self, request: CompletionRequest) -> str:
         props = (request.response_schema or {}).get("properties", {})
@@ -172,6 +175,12 @@ class Script:
             return json.dumps(self.classifier)
         if "memories" in props:
             return json.dumps({"memories": self.memories})
+        if "rewrites" in props:
+            return json.dumps({"rewrites": self.rewrites})
+        if "entailed" in props:
+            return json.dumps(
+                {"entailed": self.entailed, "missing": [], "added": self.entail_added}
+            )
         if "goals_summary" in props:
             base = {
                 "role_family": "unknown",

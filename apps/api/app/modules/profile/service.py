@@ -8,16 +8,12 @@ from app.modules.profile.models import Profile
 from app.modules.profile.schemas import ProfileOut, ProfileUpdate
 from app.modules.profile.taxonomy import REQUIRED_FIELDS, OnboardingStatus
 
-WRITING_MODES = {
-    "natural_professional",
-    "professional",
-    "executive",
-    "conversational",
-    "technical",
-    "academic",
-    "concise",
-    "detailed",
-}
+
+def writing_modes() -> set[str]:
+    """The modes defined in the Natural Voice configuration (one source of truth)."""
+    from app.modules.voice.lint import load_config
+
+    return set(load_config()["modes"])
 
 
 async def get_or_create_profile(session: AsyncSession, user: User) -> Profile:
@@ -51,7 +47,7 @@ async def update_profile(
 ) -> Profile:
     profile = await get_or_create_profile(session, user)
     changes = update.model_dump(exclude_unset=True, exclude={"confirm_onboarding"})
-    if "writing_mode" in changes and changes["writing_mode"] not in WRITING_MODES:
+    if "writing_mode" in changes and changes["writing_mode"] not in writing_modes():
         raise AppError("Unknown writing mode")
     for name, value in changes.items():
         if value is None and name not in ("job_title", "years_experience"):

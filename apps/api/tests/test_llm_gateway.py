@@ -58,8 +58,8 @@ class Harness:
 
 
 def _providers() -> tuple[MockProvider, MockProvider]:
-    return MockProvider(name="a", responder=lambda r: "from a"), MockProvider(
-        name="b", responder=lambda r: "from b"
+    return MockProvider(name="a", responder=lambda r: "from a", embedding_dim=8), MockProvider(
+        name="b", responder=lambda r: "from b", embedding_dim=8
     )
 
 

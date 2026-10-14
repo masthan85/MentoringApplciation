@@ -23,6 +23,8 @@ dependencies = [
   "cryptography>=50.0.2",
   "arq>=0.28.0",
   "email-validator>=2.3.0",
+  "pypdf>=6.20.1",
+  "pgvector>=0.5.1",
 ]
 
 [dependency-groups]
@@ -58,5 +60,5 @@ plugins = ["pydantic.mypy"]
 packages = ["app"]
 
 [[tool.mypy.overrides]]
-module = ["fakeredis.*", "arq.*"]
+module = ["fakeredis.*", "arq.*", "sentence_transformers.*"]
 ignore_missing_imports = true

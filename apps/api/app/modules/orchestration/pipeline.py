@@ -20,6 +20,13 @@ from sqlalchemy import select
 
 from app.core.db import session_scope
 from app.core.jobs import enqueue
+from app.modules.encyclopedia.prompt import (
+    INSTRUCTIONS as SOURCE_INSTRUCTIONS,
+)
+from app.modules.encyclopedia.prompt import NOTHING_FOUND, SourceBlock, build_source_block
+from app.modules.encyclopedia.retrieval import retrieve
+from app.modules.fingerprint import service as fingerprint_service
+from app.modules.fingerprint.service import FingerprintContext
 from app.modules.llm_gateway import (
     CompletionRequest,
     CompletionResult,
@@ -45,6 +52,8 @@ from app.modules.persona.selection import ActivePersona
 from app.modules.profile.models import Profile
 from app.modules.profile.service import get_or_create_profile, missing_fields
 from app.modules.safety import Risk, check_output, scan
+from app.modules.voice.card import build_voice_card
+from app.modules.voice.lint import lint_text
 
 log = logging.getLogger("app.pipeline")
 HISTORY_LOAD = 16
@@ -58,6 +67,9 @@ class UserContext:
     seniority: str | None
     persona_config: Any
     memories: list[tuple[Any, str]]
+    writing_mode: str
+    english_variant: str
+    fingerprint: FingerprintContext
 
 
 async def _load_user_context(user_id: UUID, query: str) -> UserContext:
@@ -85,6 +97,9 @@ async def _load_user_context(user_id: UUID, query: str) -> UserContext:
             seniority=profile.seniority,
             persona_config=config,
             memories=memories,
+            writing_mode=profile.writing_mode,
+            english_variant=profile.english_variant,
+            fingerprint=await fingerprint_service.context_for(session, user_id, "chat"),
         )
 
 
@@ -101,6 +116,7 @@ async def run_turn(
         user_message_id = user_message.id
         recent = await service.recent_messages(session, conversation_id, HISTORY_LOAD)
         history = [Message("user" if m.role == "user" else "assistant", m.content) for m in recent]
+        last_lint_failures = _last_lint_failures(recent)
         summary = conversation.rolling_summary
         total_messages = await service.count_messages(session, conversation_id)
         summarised = conversation.summarised_message_count
@@ -138,6 +154,7 @@ async def run_turn(
         suggested_lens=pre.suggested_lens,
         suggestion_confidence=pre.lens_confidence,
     )
+    retrieval_domains = _retrieval_domains(pre.domain, pre.intent, persona, registry)
     decision = decide(
         risk,
         rule_reason=rule_hit.reason if rule_hit else None,
@@ -182,9 +199,24 @@ async def run_turn(
         return
 
     assert isinstance(decision, ModelRoute)
+    source_block: SourceBlock | None = None
+    if pre.needs_retrieval and kind != "onboarding":
+        source_block = await _retrieve_sources(user_id, text, retrieval_domains)
     async with session_scope(user_id) as session:
         profile_row = await get_or_create_profile(session, await _user(session, user_id))
-        bundle = _assemble(kind, profile_row, context, persona, registry, history, summary, risk)
+        bundle = _assemble(
+            kind,
+            profile_row,
+            context,
+            persona,
+            registry,
+            history,
+            summary,
+            risk,
+            source_block,
+            pre,
+            last_lint_failures,
+        )
 
     # --- Stage 3: one streamed generation ------------------------------------------------
     parts: list[str] = []
@@ -220,14 +252,27 @@ async def run_turn(
     final_text = result.text if result else "".join(parts)
 
     # --- Stage 4: checks, persistence, background work -----------------------------------
-    violations = check_output(final_text)
+    violations = check_output(final_text, source_block.ids if source_block else set())
     if violations:
         log.warning(
             "output check flagged reply", extra={"kinds": sorted({v.kind for v in violations})}
         )
+    lint = (
+        lint_text(
+            final_text,
+            channel="chat",
+            mode=context.writing_mode,
+            user_message=text,
+            baseline_cv=context.fingerprint.baseline_cv,
+        )
+        if kind != "onboarding"
+        else None
+    )
     meta = {
         **base_meta,
         "route": decision.route,
+        "lint": lint.summary() if lint else None,
+        "voice": {"mode": context.writing_mode, "fingerprint": bool(context.fingerprint.summary)},
         "provider": result.provider if result else None,
         "model": result.model if result else None,
         "usage": (
@@ -245,10 +290,18 @@ async def run_turn(
         "safety_flags": [v.kind for v in violations],
         "prompt_versions": bundle.prompt_versions,
         "section_tokens": bundle.section_tokens,
+        "sources": source_block.citations if source_block else [],
+        "as_of": source_block.as_of.isoformat() if source_block and source_block.as_of else None,
+        "time_sensitive": pre.time_sensitive,
     }
     assistant_id = await _persist_assistant(user_id, conversation_id, final_text, meta)
 
-    done: dict[str, Any] = {"assistant_message_id": str(assistant_id), "route": decision.route}
+    done: dict[str, Any] = {
+        "assistant_message_id": str(assistant_id),
+        "route": decision.route,
+        "sources": meta["sources"],
+        "as_of": meta["as_of"],
+    }
     if kind == "onboarding":
         done["profile"] = await _profile_card(user_id)
 
@@ -266,6 +319,58 @@ async def run_turn(
     yield sse("done", done)
 
 
+LINT_PHRASES = {
+    "discourse_markers": "stacked transition words",
+    "formulaic_opener": "a generic opener",
+    "formulaic_closer": "a generic closer",
+    "question_restatement": "repeating the question back",
+    "redundant_conclusion": "a conclusion that repeats the body",
+    "empty_adjectives": "vague praise words",
+    "repeated_phrases": "repeated phrases",
+    "repeated_openings": "sentences that start the same way",
+    "sentence_variation": "sentences of uniform length",
+    "list_ratio": "too many bullet points",
+    "heading_ratio": "headings in a conversational reply",
+    "length": "excess length",
+}
+
+
+def _last_lint_failures(recent: list[Any]) -> list[str]:
+    """Signals the previous mentor reply failed, so the next reply can avoid them."""
+    for message in reversed(recent):
+        if message.role == "assistant":
+            lint = (message.meta or {}).get("lint") or {}
+            return list(lint.get("failed", []))[:4]
+    return []
+
+
+def _retrieval_domains(
+    classified: str, intent: str, persona: ActivePersona, registry: PackRegistry
+) -> list[str]:
+    domains = {lens.domain for lens_id in persona.lens_ids if (lens := registry.get(lens_id))}
+    if classified != "other":
+        domains.add(classified)
+    if intent == "drafting":
+        domains.add("communication")
+    return sorted(domains)
+
+
+def _sources_text(block: SourceBlock | None, wanted: bool) -> str | None:
+    if block is not None and block.citations:
+        return f"{SOURCE_INSTRUCTIONS}\n{block.text}"
+    return NOTHING_FOUND if wanted else None
+
+
+async def _retrieve_sources(user_id: UUID, query: str, domains: list[str]) -> SourceBlock | None:
+    try:
+        async with session_scope(user_id) as session:
+            result = await retrieve(session, query, domains=domains)
+    except Exception:
+        log.exception("retrieval failed; answering without sources")
+        return None
+    return build_source_block(result.chunks)
+
+
 async def _user(session: Any, user_id: UUID) -> Any:
     from app.modules.identity.models import User
 
@@ -281,6 +386,9 @@ def _assemble(
     history: list[Message],
     summary: str | None,
     risk: Risk,
+    source_block: SourceBlock | None,
+    pre: Preprocess,
+    last_lint_failures: list[str],
 ) -> PromptBundle:
     if kind == "onboarding":
         return onboarding.build_onboarding_prompt(profile, history)
@@ -291,6 +399,16 @@ def _assemble(
         rolling_summary=summary,
         history=history,
         regulated=risk is Risk.ADJACENT_REGULATED,
+        voice_card=build_voice_card(
+            channel="chat",
+            mode=context.writing_mode,
+            english_variant=context.english_variant,
+            fingerprint_summary=context.fingerprint.summary,
+            exemplars=list(context.fingerprint.exemplars),
+            feedback=[LINT_PHRASES.get(name, name) for name in last_lint_failures],
+        ),
+        sources_text=_sources_text(source_block, pre.needs_retrieval),
+        time_sensitive=pre.time_sensitive,
     )
 
 

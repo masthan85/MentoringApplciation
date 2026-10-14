@@ -12,4 +12,6 @@ select = ["E", "F", "I", "B", "UP", "S", "ASYNC", "RUF", "SIM", "C4"]
 ignore = ["S101", "E501"]  # asserts are fine in tests; the formatter owns line length
 
 [tool.ruff.lint.per-file-ignores]
+# The SQL here interpolates only a module constant; every value is a bound parameter.
+"apps/api/app/modules/encyclopedia/retrieval.py" = ["S608"]
 "**/tests/**" = ["S105", "S106", "S311"]

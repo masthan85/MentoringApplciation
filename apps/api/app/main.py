@@ -15,6 +15,11 @@ from app.core.jobs import close_pool
 from app.core.logging import bind_log_context, clear_log_context, configure_logging
 from app.core.redis import close_redis, get_redis, hit_rate_limit
 from app.core.telemetry import setup_tracing
+from app.modules.encyclopedia import jobs as _encyclopedia_jobs  # noqa: F401  (registers jobs)
+from app.modules.encyclopedia.admin import router as admin_router
+from app.modules.encyclopedia.router import router as sources_router
+from app.modules.evaluation.router import router as feedback_router
+from app.modules.fingerprint.router import router as fingerprint_router
 from app.modules.identity.router import router as identity_router
 from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
 from app.modules.memory.router import router as memory_router
@@ -23,6 +28,7 @@ from app.modules.orchestration.router import router as conversations_router
 from app.modules.persona.registry import get_registry
 from app.modules.persona.router import router as persona_router
 from app.modules.profile.router import router as profile_router
+from app.modules.studio.router import router as studio_router
 
 log = logging.getLogger("app.request")
 
@@ -96,6 +102,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(persona_router)
     app.include_router(conversations_router)
     app.include_router(memory_router)
+    app.include_router(sources_router)
+    app.include_router(fingerprint_router)
+    app.include_router(studio_router)
+    app.include_router(feedback_router)
+    app.include_router(admin_router)
     if settings.auth_mode == "dev":
         from app.modules.identity.dev import router as dev_router
 

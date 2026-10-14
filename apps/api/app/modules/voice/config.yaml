@@ -1,0 +1,106 @@
+# Natural Voice configuration: channel norms, modes and lint thresholds, all in one file.
+# Change numbers here, not in code. Tests pin the behaviour of the defaults.
+
+channels:
+  chat:
+    label: Mentoring chat
+    norms: >-
+      A conversation between two colleagues. Short paragraphs of plain prose. Usually under 200
+      words unless the user asks for depth. No headings. A list only when the content is a list.
+    target_words: [15, 220]
+    list_ratio_max: 0.25
+    heading_ratio_max: 0.0
+  slack:
+    label: Slack or Teams message
+    norms: >-
+      Informal, direct and brief. One or two short paragraphs, no headings, no sign-off. Emoji
+      only if the user uses them. Lead with the point or the ask.
+    target_words: [8, 120]
+    list_ratio_max: 0.3
+    heading_ratio_max: 0.0
+  email:
+    label: Email
+    norms: >-
+      A short greeting, the point in the first sentence, the detail in two or three short
+      paragraphs, a clear ask with any date, and a brief sign-off. No headings.
+    target_words: [50, 250]
+    list_ratio_max: 0.3
+    heading_ratio_max: 0.0
+  exec_summary:
+    label: Executive summary
+    norms: >-
+      Lead with the decision or recommendation. Follow with the two or three reasons that matter,
+      the main risk, and what is needed from the reader and by when. Plain words, numbers with
+      context. A short list is acceptable for options.
+    target_words: [70, 260]
+    list_ratio_max: 0.4
+    heading_ratio_max: 0.15
+  adr:
+    label: Architecture decision record or design note
+    norms: >-
+      Structured document. Headings for Context, Decision and Consequences are expected. State the
+      options considered and why each was rejected. Precise, neutral and specific; name trade-offs.
+    target_words: [150, 700]
+    list_ratio_max: 0.5
+    heading_ratio_max: 0.4
+  linkedin:
+    label: LinkedIn post
+    norms: >-
+      First person, specific and human. A concrete opening line, short paragraphs separated by
+      blank lines, one clear idea, no hashtags stuffing and no motivational clichés.
+    target_words: [80, 300]
+    list_ratio_max: 0.2
+    heading_ratio_max: 0.0
+  interview_spoken:
+    label: Spoken interview answer
+    norms: >-
+      Written to be said aloud. Short sentences, first person, a clear structure of situation,
+      what you did, and the result, with specifics. No lists, no headings.
+    target_words: [60, 230]
+    list_ratio_max: 0.0
+    heading_ratio_max: 0.0
+
+modes:
+  natural_professional: >-
+    Clear, warm and direct, the way a thoughtful senior colleague writes. Contractions are fine.
+  professional: >-
+    A little more formal than conversation, still plain. Few contractions, no slang.
+  executive: >-
+    Concise and decision-oriented. Lead with the conclusion. Minimal jargon.
+  conversational: >-
+    Relaxed and personal, like talking it through. Contractions and short sentences.
+  technical: >-
+    Precise and exact. Use correct terminology without over-explaining it, and include specifics.
+  academic: >-
+    Measured and careful, with qualified claims and an explicit line of reasoning.
+  concise: >-
+    As short as the content allows. Cut anything that does not change what the reader does.
+  detailed: >-
+    Thorough. Explain the reasoning and edge cases, in well-organised prose.
+  my_style: >-
+    Match the user's own writing style as described below, without copying their mistakes.
+
+# Lint thresholds. A signal that is not met marks the text as failing, and its sentences become
+# candidates for a targeted rewrite.
+thresholds:
+  discourse_density_max: 2.0        # weighted markers per 100 words
+  sentence_cv_min: 0.30             # variation in sentence length (std / mean)
+  empty_adjective_density_max: 1.0  # per 100 words
+  repeated_ngrams_max: 1            # distinct 4-word phrases repeated, beyond this fails
+  repeated_opening_share_max: 0.40  # share of sentences starting with the same two words
+  question_restatement_max: 0.60    # word overlap between the first sentence and the question
+  redundant_conclusion_max: 0.70    # overlap between the last paragraph and the rest
+  length_tolerance: 1.3             # fail when longer than target maximum times this
+  min_words_for_style_signals: 40
+  min_sentences_for_variation: 4
+
+mode_overrides:
+  academic: {discourse_density_max: 3.5, sentence_cv_min: 0.20}
+  detailed: {discourse_density_max: 3.0, length_tolerance: 2.0}
+  technical: {empty_adjective_density_max: 0.7}
+  concise: {length_tolerance: 1.0}
+
+channel_overrides:
+  adr: {sentence_cv_min: 0.20, discourse_density_max: 2.5}
+  interview_spoken: {sentence_cv_min: 0.25}
+  linkedin: {repeated_opening_share_max: 0.5}

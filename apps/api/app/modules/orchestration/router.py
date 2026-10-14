@@ -33,6 +33,8 @@ class MessageOut(BaseModel):
     content: str
     created_at: datetime
     persona: dict[str, Any] | None = None
+    sources: list[dict[str, Any]] = []
+    as_of: str | None = None
 
 
 class ConversationDetail(ConversationOut):
@@ -77,6 +79,8 @@ async def read_conversation(conversation_id: uuid.UUID, ctx: RequestCtx) -> Conv
                 content=m.content,
                 created_at=m.created_at,
                 persona=(m.meta or {}).get("persona_snapshot") if m.role == "assistant" else None,
+                sources=(m.meta or {}).get("sources", []) if m.role == "assistant" else [],
+                as_of=(m.meta or {}).get("as_of") if m.role == "assistant" else None,
             )
             for m in messages
         ],

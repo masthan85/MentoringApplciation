@@ -9,8 +9,8 @@ from fastapi import Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings, get_settings
-from app.core.db import get_sessionmaker
-from app.core.errors import RateLimited, Unauthorized
+from app.core.db import get_sessionmaker, set_admin
+from app.core.errors import Forbidden, RateLimited, Unauthorized
 from app.core.logging import bind_log_context
 from app.core.redis import get_redis, hit_rate_limit
 from app.core.security import Principal, TokenVerifier, build_verifier
@@ -76,3 +76,14 @@ async def _enforce_user_rate_limit(user_id: str, limit: int) -> None:
 
 # Commit the transaction before the response is sent.
 RequestCtx = Annotated[RequestContext, Depends(request_context, scope="function")]
+
+
+async def admin_context(ctx: RequestCtx) -> RequestContext:
+    """Like RequestCtx, but only for admins, and with write access to shared content."""
+    if not ctx.principal.is_admin:
+        raise Forbidden("Admin access is required")
+    await set_admin(ctx.session)
+    return ctx
+
+
+AdminCtx = Annotated[RequestContext, Depends(admin_context)]

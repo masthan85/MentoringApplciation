@@ -60,9 +60,22 @@ async def set_current_user(session: AsyncSession, user_id: UUID | None) -> None:
     )
 
 
+async def set_admin(session: AsyncSession) -> None:
+    """Let this transaction write shared content (the encyclopedia).
+
+    Called only from code that has already checked the caller is an admin, or from trusted
+    internal jobs. Row-level security then enforces it on the tables that need it.
+    """
+    await session.execute(text("SELECT set_config('app.is_admin', 'on', true)"))
+
+
 @asynccontextmanager
-async def session_scope(user_id: UUID | None = None) -> AsyncIterator[AsyncSession]:
+async def session_scope(
+    user_id: UUID | None = None, *, admin: bool = False
+) -> AsyncIterator[AsyncSession]:
     """One transaction, committed on success and rolled back on error."""
     async with get_sessionmaker()() as session, session.begin():
         await set_current_user(session, user_id)
+        if admin:
+            await set_admin(session)
         yield session

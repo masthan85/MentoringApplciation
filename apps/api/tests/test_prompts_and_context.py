@@ -45,6 +45,7 @@ def _bundle(**overrides: object):  # type: ignore[no-untyped-def]
         "rolling_summary": "Earlier they discussed lineage.",
         "history": [Message("user", "hello")],
         "regulated": False,
+        "voice_card": "Writing principles:\n- Answer first.",
     }
     args.update(overrides)
     return build_mentoring_prompt(**args)  # type: ignore[arg-type]
@@ -56,7 +57,7 @@ def test_sections_appear_in_the_specified_order() -> None:
         "Safety and honesty rules",
         "How to mentor:",
         "Mentor perspective",
-        "Writing style:",
+        "Writing principles:",
         "<user_profile>",
         "What you remember about this user",
         "Summary of the earlier part",

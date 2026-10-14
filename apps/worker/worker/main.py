@@ -11,6 +11,7 @@ from app.core.config import get_settings
 from app.core.db import dispose_engine
 from app.core.jobs import run_job
 from app.core.logging import configure_logging
+from app.modules.encyclopedia import jobs as _encyclopedia_jobs  # noqa: F401  (registers jobs)
 from app.modules.memory import jobs as _memory_jobs  # noqa: F401  (registers jobs)
 from app.modules.orchestration import jobs as _orchestration_jobs  # noqa: F401  (registers jobs)
 from arq import cron

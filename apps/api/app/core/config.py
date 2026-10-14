@@ -47,6 +47,10 @@ class Settings(BaseSettings):
     packs_dir: str | None = None
     lens_switch_threshold: float = 0.7
 
+    # Second-stage reranking for retrieval. "cross_encoder" needs `uv sync --group rerank`.
+    reranker: Literal["heuristic", "cross_encoder"] = "heuristic"
+    reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
     # Background jobs: "arq" enqueues to the worker, "inline" runs in-process
     # (local development without a worker, and tests).
     jobs_mode: Literal["arq", "inline"] = "arq"

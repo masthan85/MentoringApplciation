@@ -52,7 +52,7 @@ def _default_responder(request: CompletionRequest) -> str:
 class MockProvider:
     name: str = "mock"
     responder: Responder = _default_responder
-    embedding_dim: int = 8
+    embedding_dim: int = 1536  # matches the database column
     # Errors raised on successive calls before succeeding, e.g. [TransientProviderError("x")].
     failures: list[LLMError] = field(default_factory=list)
     calls: list[tuple[str, CompletionRequest | list[str]]] = field(default_factory=list)
