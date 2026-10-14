@@ -1,0 +1,65 @@
+# LLM routes. Application code names a route, never a model.
+# Change providers and models here (or point LLM_ROUTES_FILE at your own copy).
+# A target is skipped when its provider has no API key configured, so the
+# order below is the fallback order.
+#
+# Model IDs below were current when this was written. Confirm them against the
+# provider documentation before relying on them in production, particularly the
+# OpenAI fallbacks.
+
+routes:
+  # Structured intent/risk classification. Small, fast, cheap.
+  classifier:
+    max_tokens: 600
+    timeout_s: 15
+    retries: 1
+    targets:
+      - {provider: anthropic, model: claude-haiku-5-5, effort: low}
+      - {provider: openai, model: gpt-5-mini}
+
+  # Short replies: check-ins, small talk.
+  chat_small:
+    max_tokens: 1200
+    timeout_s: 30
+    targets:
+      - {provider: anthropic, model: claude-haiku-5-5, effort: low}
+      - {provider: openai, model: gpt-5-mini}
+
+  # The mentoring conversation, decisions, long drafts.
+  chat_large:
+    max_tokens: 4000
+    timeout_s: 120
+    targets:
+      - {provider: anthropic, model: claude-sonnet-5-5, effort: medium}
+      - {provider: openai, model: gpt-5}
+
+  # Targeted rewrites for Natural Voice (flagged spans only).
+  rewrite_small:
+    max_tokens: 2000
+    timeout_s: 30
+    targets:
+      - {provider: anthropic, model: claude-haiku-5-5, effort: low}
+      - {provider: openai, model: gpt-5-mini}
+
+  # LLM-as-judge for the evaluation suite.
+  judge:
+    max_tokens: 1500
+    timeout_s: 60
+    targets:
+      - {provider: anthropic, model: claude-sonnet-5-5, effort: high}
+      - {provider: openai, model: gpt-5}
+
+  embedding:
+    kind: embedding
+    timeout_s: 30
+    targets:
+      - {provider: openai, model: text-embedding-3-small}
+
+# USD per million tokens. Add entries as models change; unknown models log
+# their usage with cost null instead of guessing.
+pricing:
+  anthropic/claude-haiku-5-5: {input_per_mtok: 0.10, output_per_mtok: 0.50, cache_read_per_mtok: 0.01}
+  anthropic/claude-sonnet-5-5: {input_per_mtok: 2.00, output_per_mtok: 10.00, cache_read_per_mtok: 0.20}
+  anthropic/claude-opus-5-5: {input_per_mtok: 4.00, output_per_mtok: 20.00, cache_read_per_mtok: 0.20}
+  openai/text-embedding-3-small: {input_per_mtok: 0.02}
+  mock/mock-1: {input_per_mtok: 0.0, output_per_mtok: 0.0}
