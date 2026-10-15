@@ -25,6 +25,8 @@ class Profile(Base):
     stack: Mapped[list[Any]] = mapped_column(JSONB, server_default=text("'[]'::jsonb"))
     goals_summary: Mapped[str | None] = mapped_column(Text)
     current_challenge: Mapped[str | None] = mapped_column(Text)
+    country: Mapped[str | None] = mapped_column(String(2))
+    timezone: Mapped[str | None] = mapped_column(String(64))
     english_variant: Mapped[str] = mapped_column(String(5), server_default="en-GB")
     writing_mode: Mapped[str] = mapped_column(String(30), server_default="natural_professional")
     email_reminders: Mapped[bool] = mapped_column(Boolean, server_default=text("false"))

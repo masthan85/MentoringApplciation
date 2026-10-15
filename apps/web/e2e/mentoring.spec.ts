@@ -21,6 +21,7 @@ test("a new user onboards, has a mentoring conversation and manages their notes"
   await page.getByRole("button", { name: "This looks right" }).click();
   await expect(page.getByRole("status")).toContainText("Still needed");
 
+  await page.getByLabel("Country you work in").selectOption("GB");
   await page.getByLabel("Role").selectOption("data_engineer");
   await page.getByLabel("Seniority").selectOption("senior");
   await page.getByLabel(/Tools and technologies/).fill("dbt, Snowflake, Airflow");
@@ -239,6 +240,10 @@ test("a user can rehearse a conversation, link a mentor and export or delete the
   await page.getByRole("button", { name: "Accept" }).click();
   await page.goto("/settings");
   await expect(page.getByText(/mentor\.brief_viewed · by someone else/)).toBeVisible();
+
+  // The user can say where they work; it is saved with their time zone.
+  await page.getByLabel("Country", { exact: true }).selectOption("US");
+  await expect(page.getByRole("status").filter({ hasText: "Crisis resources, spelling and currency now follow" })).toBeVisible();
 
   // Deleting the account needs the phrase and signs the user out.
   await page.getByLabel(/Type "delete my account"/).fill("nope");

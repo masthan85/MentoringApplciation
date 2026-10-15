@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from app.modules.safety import CRISIS_MESSAGE, Risk, refusal_message
+from app.modules.safety import Risk, crisis_message, refusal_message
 
 LARGE_INTENTS = {"decision", "drafting", "practice", "technical_question", "mentoring"}
 SHORT_REPLY_WORDS = 6
@@ -31,10 +31,16 @@ def combine_risk(rule_risk: Risk, classifier_risk: str) -> Risk:
 
 
 def decide(
-    risk: Risk, *, rule_reason: str | None, intent: str, text: str, kind: str
+    risk: Risk,
+    *,
+    rule_reason: str | None,
+    intent: str,
+    text: str,
+    kind: str,
+    country: str | None = None,
 ) -> FixedReply | ModelRoute:
     if risk is Risk.CRISIS:
-        return FixedReply("crisis", CRISIS_MESSAGE, rule_reason or "crisis_classifier")
+        return FixedReply("crisis", crisis_message(country), rule_reason or "crisis_classifier")
     if risk is Risk.PROHIBITED:
         reason = rule_reason if rule_reason and rule_reason != "regulated_topic" else "other"
         return FixedReply("refusal", refusal_message(reason), reason)

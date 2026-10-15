@@ -70,6 +70,10 @@ class Settings(BaseSettings):
     email_from: str = "Mentor <no-reply@mentor.example>"
     public_web_url: str = "http://localhost:3000"
 
+    # Countries users can choose. India is defined but off until its crisis wording, career notes
+    # and starter content have been reviewed (docs/regions.md). Existing profiles keep working.
+    enabled_countries: list[str] = ["GB", "IE", "US", "CA"]
+
     # Billing. Off by default: with billing disabled every signed-in user has every feature.
     billing_enabled: bool = False
     stripe_secret_key: SecretStr | None = None
@@ -77,6 +81,8 @@ class Settings(BaseSettings):
     stripe_price_mentor: str | None = None
     stripe_price_mentor_human: str | None = None
     free_daily_turns: int = 20
+    # Let Stripe work out VAT, GST or sales tax. Needs tax registrations set up in Stripe first.
+    stripe_automatic_tax: bool = False
 
     # Largest request body accepted, in bytes. Uploads have their own, larger limit.
     max_body_bytes: int = 1_000_000

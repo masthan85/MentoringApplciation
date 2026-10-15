@@ -27,4 +27,11 @@ class OnboardingStatus(StrEnum):
 
 
 # Fields the onboarding conversation must capture before the profile can be confirmed.
-REQUIRED_FIELDS = ("role_family", "seniority", "stack", "goals_summary", "current_challenge")
+REQUIRED_FIELDS = (
+    "role_family",
+    "seniority",
+    "country",
+    "stack",
+    "goals_summary",
+    "current_challenge",
+)

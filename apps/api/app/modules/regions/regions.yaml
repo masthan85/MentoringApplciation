@@ -1,0 +1,102 @@
+# One entry per supported country. DRAFT: the crisis resources and the career notes need review by
+# someone qualified in each country before launch there (see docs/regions.md). Phone numbers were
+# checked against search results on 2026-10-15, not against the services' own pages.
+#
+# crisis.emergency   what to dial in immediate danger
+# crisis.lines       free support lines, one sentence each
+# career_notes       orientation for the mentor: general norms, never legal advice
+regions:
+  GB:
+    name: United Kingdom
+    timezone: Europe/London
+    english_variant: en-GB
+    currency: gbp
+    jurisdictions: [global, GB]
+    data_regime: UK GDPR and the Data Protection Act 2018
+    crisis:
+      emergency: "call 999"
+      lines:
+        - "Samaritans are on 116 123, free, at any time."
+        - "NHS 111 can also help with urgent mental health support."
+      other: "Your GP, or someone you trust, is a good next step too."
+    career_notes: >-
+      Pay is usually quoted as a gross annual salary in pounds. Statutory notice, redundancy pay and
+      the right to request flexible working exist in law, and many contracts add longer notice. CVs
+      are normally two pages, without a photo. Roles may be offered with a bonus, pension
+      contributions and, sometimes, equity. Right to work and visa sponsorship rules matter for
+      people from abroad.
+  IE:
+    name: Ireland
+    timezone: Europe/Dublin
+    english_variant: en-GB
+    currency: eur
+    jurisdictions: [global, IE, EU]
+    data_regime: EU GDPR and the Data Protection Act 2018
+    crisis:
+      emergency: "call 999 or 112"
+      lines:
+        - "Samaritans are on 116 123, free, at any time."
+        - "Pieta is on 1800 247 247, free, at any time, or text HELP to 51444."
+        - "You can text HELLO to 50808 to reach a trained volunteer."
+      other: "Your GP, or someone you trust, is a good next step too."
+    career_notes: >-
+      Pay is usually quoted as a gross annual salary in euro. Minimum notice and employment terms are
+      set by law, and many contracts add more. CVs are normally two pages, without a photo. Ireland
+      has a large multinational technology and data sector, and many roles are hybrid. Employment
+      permits and EU free movement affect who can take a role.
+  US:
+    name: United States
+    timezone: America/New_York
+    english_variant: en-US
+    currency: usd
+    jurisdictions: [global, US]
+    data_regime: a mix of state privacy laws (for example California) and sector rules
+    crisis:
+      emergency: "call 911"
+      lines:
+        - "You can call or text 988 (the Suicide and Crisis Lifeline) at any time, free."
+      other: "A doctor, or someone you trust, is a good next step too."
+    career_notes: >-
+      Most employment is at will, and notice is a matter of courtesy and contract rather than a
+      statutory right. Health insurance and retirement plans usually come through the employer, so
+      total compensation (base, bonus, equity, benefits) matters more than base pay alone. The
+      document is a resume, usually one or two pages. Many states and cities limit asking about
+      salary history, and some require pay ranges in job adverts. Visa sponsorship (such as H-1B) is
+      a major factor for people from abroad.
+  CA:
+    name: Canada
+    timezone: America/Toronto
+    english_variant: en-CA
+    currency: cad
+    jurisdictions: [global, CA]
+    data_regime: PIPEDA and provincial privacy laws
+    crisis:
+      emergency: "call 911"
+      lines:
+        - "You can call or text 988 (the Suicide Crisis Helpline) at any time, free, in English or French."
+      other: "A doctor, or someone you trust, is a good next step too."
+    career_notes: >-
+      Employment standards, notice and severance rules are mostly set by each province, so the answer
+      depends on where the person works. Pay is quoted in Canadian dollars, often as an annual
+      salary. The document is a resume, usually one or two pages. In Quebec French is often required
+      at work. Immigration pathways, including Express Entry and work permits, affect many people in
+      technology roles.
+  IN:
+    name: India
+    timezone: Asia/Kolkata
+    english_variant: en-IN
+    currency: inr
+    jurisdictions: [global, IN]
+    data_regime: the Digital Personal Data Protection Act 2023
+    crisis:
+      emergency: "call 112"
+      lines:
+        - "Tele-MANAS is a free government mental health helpline, on 14416 or 1800-891-4416, at any time."
+      other: "A doctor, or someone you trust, is a good next step too."
+    career_notes: >-
+      Pay is often discussed as CTC (cost to company), which includes fixed pay, variable pay and
+      benefits, so in-hand monthly pay is lower than CTC divided by twelve. Amounts are commonly
+      quoted in lakhs per annum (LPA). Notice periods of one to three months are common and can
+      sometimes be negotiated or bought out. Hiring differs a lot between large IT services firms,
+      product companies, global capability centres and startups, and offers may be conditional on
+      background checks. Moving abroad often involves visas and sponsorship.

@@ -15,7 +15,7 @@ from app.modules.identity.service import consent_state
 from app.modules.llm_gateway import CompletionRequest, LLMError, Message, current_gateway
 from app.modules.orchestration.context import SAFETY, format_profile
 from app.modules.profile.service import get_or_create_profile
-from app.modules.safety import CRISIS_MESSAGE, Risk, refusal_message, scan
+from app.modules.safety import Risk, crisis_message, refusal_message, scan
 from app.modules.studio.models import Draft
 from app.modules.studio.schemas import DraftOut, DraftRequest
 from app.modules.voice.card import build_voice_card
@@ -53,7 +53,8 @@ async def create_draft(session: AsyncSession, user: User, request: DraftRequest)
     notes = f"{request.purpose}\n{request.key_points}"
     hit = scan(notes)
     if hit and hit.risk is Risk.CRISIS:
-        return DraftOut(refused="crisis", message=CRISIS_MESSAGE)
+        country = (await get_or_create_profile(session, user)).country
+        return DraftOut(refused="crisis", message=crisis_message(country))
     if hit and hit.risk is Risk.PROHIBITED:
         return DraftOut(refused="prohibited", message=refusal_message(hit.reason))
 

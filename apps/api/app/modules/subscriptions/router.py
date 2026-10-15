@@ -9,6 +9,8 @@ from app.core.config import get_settings
 from app.core.db import session_scope
 from app.core.deps import RequestCtx
 from app.core.errors import AppError, Conflict, NotFound
+from app.modules.profile.service import get_or_create_profile
+from app.modules.regions import service as regions
 from app.modules.subscriptions import service, stripe
 from app.modules.subscriptions.entitlements import FEATURES, current_plan
 from app.modules.subscriptions.models import Subscription
@@ -55,6 +57,7 @@ async def checkout(body: CheckoutIn, ctx: RequestCtx) -> UrlOut:
     settings = get_settings()
     if not settings.billing_enabled:
         raise NotFound("Billing is not switched on")
+    profile_country = (await get_or_create_profile(ctx.session, ctx.user)).country
     plan = await current_plan(ctx.session, ctx.user.id)
     if plan.id == body.plan:
         raise Conflict("You are already on this plan")
@@ -73,6 +76,7 @@ async def checkout(body: CheckoutIn, ctx: RequestCtx) -> UrlOut:
         price_id=price,
         plan=body.plan,
         customer_id=sub.stripe_customer_id if sub else None,
+        currency=regions.currency_for(profile_country),
     )
     return UrlOut(url=url)
 

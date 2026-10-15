@@ -31,6 +31,7 @@ Phases 0 to 4 are built: foundations, the core mentoring loop, knowledge and voi
 | Stripe plans and entitlements | Done, untested against real Stripe; off by default |
 | Export, account deletion, access log, admin audit | Done |
 | Security headers, body limits, log redaction, upload gate | Done; no upload route exists yet |
+| UK, Ireland, US and Canada: crisis resources, time zones, spelling, currency, working context | Done; wording needs review per country. India is built but switched off (`docs/regions.md`) |
 | Azure Bicep and deployment guide | Written, never compiled or deployed |
 
 ## Run it

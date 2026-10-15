@@ -59,6 +59,7 @@ from app.modules.persona.selection import ActivePersona
 from app.modules.practice import service as practice_service
 from app.modules.profile.models import Profile
 from app.modules.profile.service import get_or_create_profile, missing_fields
+from app.modules.regions import service as regions
 from app.modules.safety import Risk, check_output, scan
 from app.modules.voice.card import build_voice_card
 from app.modules.voice.lint import lint_text
@@ -80,6 +81,7 @@ class UserContext:
     english_variant: str
     fingerprint: FingerprintContext
     goals_text: str = ""
+    country: str | None = None
 
 
 async def _load_user_context(user_id: UUID, query: str) -> UserContext:
@@ -99,9 +101,8 @@ async def _load_user_context(user_id: UUID, query: str) -> UserContext:
                 "stack": list(profile.stack or []),
                 "goals_summary": profile.goals_summary,
                 "current_challenge": profile.current_challenge,
-                "english_variant": "American English"
-                if profile.english_variant == "en-US"
-                else "British English",
+                "country": regions.country_name(profile.country),
+                "english_variant": regions.spelling_label(profile.english_variant),
             },
             role_family=profile.role_family,
             seniority=profile.seniority,
@@ -111,6 +112,7 @@ async def _load_user_context(user_id: UUID, query: str) -> UserContext:
             english_variant=profile.english_variant,
             fingerprint=await fingerprint_service.context_for(session, user_id, "chat"),
             goals_text=await goals_service.prompt_summary(session, user_id),
+            country=profile.country,
         )
 
 
@@ -177,6 +179,7 @@ async def run_turn(
         intent=pre.intent,
         text=text,
         kind=kind,
+        country=context.country,
     )
     persona_view = {
         "names": [lens.name for lid in persona.lens_ids if (lens := registry.get(lid))],
@@ -217,7 +220,9 @@ async def run_turn(
     assert isinstance(decision, ModelRoute)
     source_block: SourceBlock | None = None
     if pre.needs_retrieval and kind not in ("onboarding", "practice"):
-        source_block = await _retrieve_sources(user_id, text, retrieval_domains)
+        source_block = await _retrieve_sources(
+            user_id, text, retrieval_domains, regions.retrieval_jurisdictions(context.country)
+        )
     async with session_scope(user_id) as session:
         profile_row = await get_or_create_profile(session, await _user(session, user_id))
         bundle = _assemble(
@@ -381,10 +386,12 @@ def _sources_text(block: SourceBlock | None, wanted: bool) -> str | None:
     return NOTHING_FOUND if wanted else None
 
 
-async def _retrieve_sources(user_id: UUID, query: str, domains: list[str]) -> SourceBlock | None:
+async def _retrieve_sources(
+    user_id: UUID, query: str, domains: list[str], jurisdictions: tuple[str, ...]
+) -> SourceBlock | None:
     try:
         async with session_scope(user_id) as session:
-            result = await retrieve(session, query, domains=domains)
+            result = await retrieve(session, query, domains=domains, jurisdictions=jurisdictions)
     except Exception:
         log.exception("retrieval failed; answering without sources")
         return None
@@ -443,6 +450,7 @@ def _assemble(
         ),
         sources_text=_sources_text(source_block, pre.needs_retrieval),
         time_sensitive=pre.time_sensitive,
+        region_text=regions.region_prompt(context.country),
     )
 
 
@@ -480,6 +488,9 @@ async def _profile_card(user_id: UUID) -> dict[str, Any]:
         profile = await get_or_create_profile(session, await _user(session, user_id))
         return {
             "missing_fields": missing_fields(profile),
+            "country": profile.country,
+            "timezone": profile.timezone,
+            "english_variant": profile.english_variant,
             "role_family": profile.role_family,
             "seniority": profile.seniority,
             "job_title": profile.job_title,

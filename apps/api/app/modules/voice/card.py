@@ -1,5 +1,6 @@
 """The voice card: a compact style brief for the generating model (Natural Voice, layer A)."""
 
+from app.modules.regions.service import spelling_label
 from app.modules.voice.lint import load_config
 from app.prompts import registry as prompts
 
@@ -26,7 +27,7 @@ def build_voice_card(
     channel_cfg = config["channels"].get(channel, config["channels"]["chat"])
     if mode not in config["modes"] or (mode == "my_style" and not fingerprint_summary):
         mode = "natural_professional"  # my_style needs a fingerprint to follow
-    spelling = "American English" if english_variant == "en-US" else "British English"
+    spelling = spelling_label(english_variant)
     low, high = channel_cfg["target_words"]
     lines = [
         prompts.load(*PRINCIPLES),

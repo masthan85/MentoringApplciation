@@ -17,13 +17,16 @@ from app.modules.orchestration.context import (
 from app.modules.profile.models import Profile
 from app.modules.profile.service import missing_fields
 from app.modules.profile.taxonomy import RoleFamily, Seniority
+from app.modules.regions import service as regions
+from app.modules.regions.service import codes as region_codes
 from app.prompts import registry as prompts
 
 log = logging.getLogger(__name__)
-EXTRACTION = ("profile_extraction", 1)
+EXTRACTION = ("profile_extraction", 2)
 
 NEEDED_LABELS = {
     "role_family": "what they do (their role)",
+    "country": "which country they work in (UK, Ireland, US, Canada or India)",
     "seniority": "their level of seniority",
     "stack": "the tools and technologies they use",
     "goals_summary": "what they want from mentoring or their career",
@@ -38,6 +41,7 @@ SCHEMA = {
         "seniority",
         "job_title",
         "years_experience",
+        "country",
         "stack",
         "goals_summary",
         "current_challenge",
@@ -47,6 +51,7 @@ SCHEMA = {
         "seniority": {"type": "string", "enum": [*[s.value for s in Seniority], "unknown"]},
         "job_title": {"type": "string"},
         "years_experience": {"type": "integer"},
+        "country": {"type": "string", "enum": [*region_codes(), "other", "unknown"]},
         "stack": {"type": "array", "items": {"type": "string"}},
         "goals_summary": {"type": "string"},
         "current_challenge": {"type": "string"},
@@ -68,6 +73,7 @@ class ProfileDraft(BaseModel):
     ] = "unknown"
     seniority: Literal["junior", "mid", "senior", "lead", "executive", "unknown"] = "unknown"
     job_title: str = ""
+    country: str = "unknown"
     years_experience: int = Field(default=-1)
     stack: list[str] = Field(default_factory=list)
     goals_summary: str = ""
@@ -86,6 +92,15 @@ def merge_draft(profile: Profile, draft: ProfileDraft) -> list[str]:
     set_if("role_family", draft.role_family)
     set_if("seniority", draft.seniority)
     set_if("job_title", draft.job_title.strip()[:120])
+    if draft.country in region_codes() and profile.country != draft.country:
+        profile.country = draft.country
+        changed.append("country")
+        region = regions.get(draft.country)
+        if region is not None:
+            # Only fill in what the user has not already chosen.
+            profile.timezone = profile.timezone or region.timezone
+            if profile.english_variant == "en-GB" and region.english_variant != "en-GB":
+                profile.english_variant = region.english_variant
     if 0 <= draft.years_experience <= 60:
         set_if("years_experience", draft.years_experience)
     set_if("goals_summary", draft.goals_summary.strip()[:2000])
@@ -128,6 +143,7 @@ def build_onboarding_prompt(profile: Profile, history: list[Message]) -> PromptB
         "role_family",
         "seniority",
         "job_title",
+        "country",
         "years_experience",
         "stack",
         "goals_summary",

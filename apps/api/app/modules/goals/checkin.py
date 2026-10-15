@@ -3,7 +3,6 @@
 import logging
 from datetime import UTC, date, datetime, timedelta
 from typing import Any
-from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,16 +14,22 @@ from app.modules.goals.models import CheckIn, Commitment
 from app.modules.goals.schemas import CheckInComplete, CommitmentIn
 from app.modules.identity.models import User
 from app.modules.llm_gateway import CompletionRequest, LLMError, Message, current_gateway
-from app.modules.safety import CRISIS_MESSAGE, Risk, check_output, scan
+from app.modules.profile.service import get_or_create_profile
+from app.modules.regions import service as regions
+from app.modules.safety import Risk, check_output, crisis_message, scan
 from app.prompts import registry as prompts
 
 log = logging.getLogger(__name__)
-LONDON = ZoneInfo("Europe/London")
 REPLY_PROMPT = ("checkin_reply", 1)
 
 
+def today_in(timezone: str | None, now: datetime | None = None) -> date:
+    """The user's local date. Weeks start on Monday everywhere, as these are working weeks."""
+    return (now or datetime.now(UTC)).astimezone(regions.zone(timezone)).date()
+
+
 def today_london(now: datetime | None = None) -> date:
-    return (now or datetime.now(UTC)).astimezone(LONDON).date()
+    return today_in("Europe/London", now)
 
 
 def week_start(day: date) -> date:
@@ -34,7 +39,10 @@ def week_start(day: date) -> date:
 async def current_check_in(
     session: AsyncSession, user: User, *, today: date | None = None
 ) -> CheckIn:
-    start = week_start(today or today_london())
+    if today is None:
+        profile = await get_or_create_profile(session, user)
+        today = today_in(profile.timezone)
+    start = week_start(today)
     existing = (
         await session.execute(
             select(CheckIn).where(CheckIn.user_id == user.id, CheckIn.week_start == start)
@@ -158,7 +166,7 @@ async def complete_check_in(
     }
     safety: str | None = None
     if hit and hit.risk is Risk.CRISIS:
-        safety = CRISIS_MESSAGE
+        safety = crisis_message((await get_or_create_profile(session, user)).country)
         check_in.reply = None
     else:
         check_in.reply = await _reply(updates, body.blockers, next_title, next_due)

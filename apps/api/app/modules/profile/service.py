@@ -7,6 +7,7 @@ from app.modules.identity.models import User
 from app.modules.profile.models import Profile
 from app.modules.profile.schemas import ProfileOut, ProfileUpdate
 from app.modules.profile.taxonomy import REQUIRED_FIELDS, OnboardingStatus
+from app.modules.regions import service as regions
 
 
 def writing_modes() -> set[str]:
@@ -49,6 +50,12 @@ async def update_profile(
     changes = update.model_dump(exclude_unset=True, exclude={"confirm_onboarding"})
     if "writing_mode" in changes and changes["writing_mode"] not in writing_modes():
         raise AppError("Unknown writing mode")
+    if changes.get("country"):
+        # Choosing a country sets sensible defaults for anything the user did not also choose.
+        region = regions.get(changes["country"])
+        if region is not None:
+            changes.setdefault("timezone", region.timezone)
+            changes.setdefault("english_variant", region.english_variant)
     for name, value in changes.items():
         if value is None and name not in ("job_title", "years_experience", "email_reminders"):
             continue  # required fields are cleared by sending an empty string or list

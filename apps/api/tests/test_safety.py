@@ -1,5 +1,5 @@
 import pytest
-from app.modules.safety import CRISIS_MESSAGE, Risk, check_output, refusal_message, scan
+from app.modules.safety import Risk, check_output, crisis_message, refusal_message, scan
 
 
 @pytest.mark.parametrize(
@@ -79,7 +79,7 @@ def test_crisis_outranks_everything() -> None:
 
 def test_crisis_message_has_uk_resources() -> None:
     for needle in ("999", "116 123", "111"):
-        assert needle in CRISIS_MESSAGE
+        assert needle in crisis_message("GB")
 
 
 @pytest.mark.parametrize(

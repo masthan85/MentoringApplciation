@@ -18,6 +18,9 @@ export type TurnEvent =
 
 export type ProfileCard = {
   missing_fields: string[];
+  country?: string | null;
+  timezone?: string | null;
+  english_variant?: string;
   role_family: string | null;
   seniority: string | null;
   job_title: string | null;

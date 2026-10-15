@@ -13,6 +13,7 @@ async def test_profile_starts_empty_and_lists_what_is_missing(
     assert set(body["missing_fields"]) == {
         "role_family",
         "seniority",
+        "country",
         "stack",
         "goals_summary",
         "current_challenge",
@@ -46,6 +47,7 @@ async def test_confirming_needs_a_complete_profile(
     assert "seniority" in response.json()["missing_fields"]
     full = {
         "seniority": "mid",
+        "country": "IE",
         "stack": ["python"],
         "goals_summary": "Wants to lead ML projects.",
         "current_challenge": "Models are hard to deploy.",

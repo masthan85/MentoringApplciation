@@ -72,6 +72,10 @@ Admin-only. A run has a label, mode, status, a summary, per-scenario results and
 
 Two SECURITY DEFINER functions support background work: `scheduler_user_ids()` and `delete_eval_users()`.
 
+## profiles: country and time zone
+
+`profiles.country` (two-letter code, required to finish onboarding) and `profiles.timezone` (IANA name) drive the crisis message, local dates for check-ins, retrieval jurisdictions and the billing currency. See `docs/regions.md`.
+
 ## mentor_links, mentor_briefs, session_notes
 
 A link joins a mentee to a mentor email, with a hashed invitation token, sharing `scopes`, a status (invited, active, ended) and an expiry. Briefs hold edited JSON sections and a status (draft, approved). Session notes are written by mentors and read by both sides. Mentees control links and briefs through row-level security; mentors read approved briefs and write notes only through the `mentor_view_brief` and `mentor_add_session_note` functions, which also write audit events. `mentor_accept_invite` accepts an invitation.

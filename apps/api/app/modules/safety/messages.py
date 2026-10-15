@@ -4,18 +4,18 @@ DRAFT: the wording below needs review by someone qualified (for example a
 mental-health professional and the data protection lead) before launch.
 """
 
-CRISIS_MESSAGE_VERSION = "1-draft"
+CRISIS_MESSAGE_VERSION = "2-draft"
 
-CRISIS_MESSAGE = (
-    "I'm sorry you're going through this. I'm an AI mentor, and I can't give the kind of "
-    "support this needs, but you deserve support right now.\n\n"
-    "If you are in immediate danger, or you might act on thoughts of harming yourself or "
-    "someone else, call 999 now.\n\n"
-    "You can talk to someone at any time, for free: Samaritans are on 116 123. NHS 111 can "
-    "also help with urgent mental health support. Your GP, or someone you trust, is a good "
-    "next step too.\n\n"
-    "If I've misread what you said and you're okay, tell me and we can carry on."
-)
+
+def crisis_message(country: str | None) -> str:
+    """The fixed crisis message for the user's country; a multi-country one when it is not known."""
+    from app.modules.regions.crisis import crisis_message as build
+
+    return build(country)
+
+
+# What a user sees before they have said which country they are in.
+CRISIS_MESSAGE = crisis_message(None)
 
 _REFUSALS = {
     "live_interview_assistance": (

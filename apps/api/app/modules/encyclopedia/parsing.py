@@ -23,7 +23,7 @@ DOMAINS = (
     "communication",
     "general",
 )
-JURISDICTIONS = ("global", "GB", "EU", "US")
+JURISDICTIONS = ("global", "GB", "IE", "EU", "US", "CA", "IN")
 _FRONT = re.compile(r"\A---\s*\n(.*?)\n---\s*\n?", re.DOTALL)
 
 

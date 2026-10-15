@@ -395,6 +395,7 @@ async def test_onboarding_fills_the_profile_card_and_can_be_confirmed(
     llm.script.profile = {
         "role_family": "data_engineer",
         "seniority": "mid",
+        "country": "GB",
         "stack": ["dbt", "Snowflake"],
     }
     events = await _send(

@@ -1032,6 +1032,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/regions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Regions
+         * @description The countries the product supports, with their default time zone, spelling and currency.
+         */
+        get: operations["list_regions_v1_regions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/reviews": {
         parameters: {
             query?: never;
@@ -2100,6 +2120,8 @@ export interface components {
         };
         /** ProfileOut */
         ProfileOut: {
+            /** Country */
+            country?: string | null;
             /** Current Challenge */
             current_challenge: string | null;
             /**
@@ -2120,6 +2142,8 @@ export interface components {
             seniority: components["schemas"]["Seniority"] | null;
             /** Stack */
             stack: string[];
+            /** Timezone */
+            timezone?: string | null;
             /** Writing Mode */
             writing_mode: string;
             /** Years Experience */
@@ -2135,6 +2159,8 @@ export interface components {
              * @default false
              */
             confirm_onboarding: boolean;
+            /** Country */
+            country?: string | null;
             /** Current Challenge */
             current_challenge?: string | null;
             /** Email Reminders */
@@ -2149,6 +2175,8 @@ export interface components {
             seniority?: components["schemas"]["Seniority"] | null;
             /** Stack */
             stack?: string[] | null;
+            /** Timezone */
+            timezone?: string | null;
             /** Writing Mode */
             writing_mode?: string | null;
             /** Years Experience */
@@ -4730,6 +4758,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_regions_v1_regions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    }[];
                 };
             };
         };

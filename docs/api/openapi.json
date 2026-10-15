@@ -2305,6 +2305,17 @@
       },
       "ProfileOut": {
         "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
           "current_challenge": {
             "anyOf": [
               {
@@ -2384,6 +2395,17 @@
             "title": "Stack",
             "type": "array"
           },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
           "writing_mode": {
             "title": "Writing Mode",
             "type": "string"
@@ -2423,6 +2445,17 @@
             "default": false,
             "title": "Confirm Onboarding",
             "type": "boolean"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
           },
           "current_challenge": {
             "anyOf": [
@@ -2517,6 +2550,17 @@
               }
             ],
             "title": "Stack"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
           },
           "writing_mode": {
             "anyOf": [
@@ -6546,6 +6590,35 @@
         "summary": "Update Profile",
         "tags": [
           "profile"
+        ]
+      }
+    },
+    "/v1/regions": {
+      "get": {
+        "description": "The countries the product supports, with their default time zone, spelling and currency.",
+        "operationId": "list_regions_v1_regions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "title": "Response List Regions V1 Regions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Regions",
+        "tags": [
+          "regions"
         ]
       }
     },

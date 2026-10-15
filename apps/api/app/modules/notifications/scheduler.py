@@ -24,12 +24,12 @@ log = logging.getLogger("app.scheduler")
 async def process_user(user_id: UUID, now: datetime | None = None) -> dict[str, int]:
     now = now or datetime.now(UTC)
     counts = {"notifications": 0, "monthly_notes": 0}
-    today = checkin.today_london(now)
     async with session_scope(user_id) as session:
         user = (await session.execute(select(User).where(User.id == user_id))).scalar_one()
         profile = (
             await session.execute(select(Profile).where(Profile.user_id == user_id))
         ).scalar_one_or_none()
+        today = checkin.today_in(profile.timezone if profile else None, now)
         email_to = user.email if profile and profile.email_reminders and user.email else None
 
         async def send(**kwargs: Any) -> None:

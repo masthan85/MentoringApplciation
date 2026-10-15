@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { api } from "@/lib/browser-api";
+import { useRegions } from "@/lib/regions";
 import type { ProfileCard as Card } from "@/lib/stream";
 
 export const ROLES: Record<string, string> = {
@@ -22,6 +23,7 @@ export const LEVELS: Record<string, string> = {
   executive: "Executive",
 };
 const FIELD_LABELS: Record<string, string> = {
+  country: "country",
   role_family: "role",
   seniority: "seniority",
   stack: "tools",
@@ -30,6 +32,7 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 type Draft = {
+  country: string;
   role_family: string;
   seniority: string;
   job_title: string;
@@ -39,8 +42,17 @@ type Draft = {
   current_challenge: string;
 };
 
+function browserTimeZone(): string | undefined {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function toDraft(card: Card): Draft {
   return {
+    country: card.country ?? "",
     role_family: card.role_family ?? "",
     seniority: card.seniority ?? "",
     job_title: card.job_title ?? "",
@@ -67,6 +79,7 @@ export function ProfileCard({
   onSaved?: (card: Card) => void;
   onConfirmed?: () => void;
 }) {
+  const regions = useRegions();
   const [draft, setDraft] = useState<Draft>(toDraft(card));
   const [message, setMessage] = useState("");
 
@@ -74,6 +87,9 @@ export function ProfileCard({
 
   function body(confirm: boolean) {
     return {
+      country: draft.country || undefined,
+      // The browser knows the real time zone; the server only knows the country's usual one.
+      timezone: card.timezone ? undefined : browserTimeZone(),
       role_family: (draft.role_family || undefined) as never,
       seniority: (draft.seniority || undefined) as never,
       job_title: draft.job_title || undefined,
@@ -117,6 +133,17 @@ export function ProfileCard({
         Correct anything that is wrong. You can change this whenever you like.
       </p>
       <div className="flex flex-col gap-3 text-sm">
+        <label className="flex flex-col gap-1">
+          Country you work in
+          <select className={input} style={border} value={draft.country} onChange={(e) => set("country")(e.target.value)}>
+            <option value="">Choose a country</option>
+            {regions.map((r) => (
+              <option key={r.code} value={r.code}>
+                {r.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="flex flex-col gap-1">
           Role
           <select className={input} style={border} value={draft.role_family} onChange={(e) => set("role_family")(e.target.value)}>

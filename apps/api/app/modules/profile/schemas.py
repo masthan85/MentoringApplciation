@@ -3,6 +3,8 @@ from typing import Annotated
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
 
 from app.modules.profile.taxonomy import OnboardingStatus, RoleFamily, Seniority
+from app.modules.regions.service import ENGLISH_VARIANTS, valid_timezone
+from app.modules.regions.service import codes as region_codes
 
 ShortText = Annotated[str, StringConstraints(strip_whitespace=True, max_length=60)]
 
@@ -17,6 +19,8 @@ class ProfileOut(BaseModel):
     stack: list[str]
     goals_summary: str | None
     current_challenge: str | None
+    country: str | None = None
+    timezone: str | None = None
     english_variant: str
     writing_mode: str
     email_reminders: bool = False
@@ -42,6 +46,8 @@ class ProfileUpdate(BaseModel):
     current_challenge: (
         Annotated[str, StringConstraints(strip_whitespace=True, max_length=2000)] | None
     ) = None
+    country: str | None = None
+    timezone: str | None = None
     english_variant: str | None = None
     writing_mode: str | None = None
     email_reminders: bool | None = None
@@ -50,8 +56,24 @@ class ProfileUpdate(BaseModel):
     @field_validator("english_variant")
     @classmethod
     def _variant(cls, value: str | None) -> str | None:
-        if value is not None and value not in ("en-GB", "en-US"):
-            raise ValueError("english_variant must be en-GB or en-US")
+        if value is not None and value not in ENGLISH_VARIANTS:
+            raise ValueError(f"english_variant must be one of {', '.join(ENGLISH_VARIANTS)}")
+        return value
+
+    @field_validator("country")
+    @classmethod
+    def _country(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        if value not in region_codes():
+            raise ValueError(f"country must be one of {', '.join(region_codes())}")
+        return value
+
+    @field_validator("timezone")
+    @classmethod
+    def _timezone(cls, value: str | None) -> str | None:
+        if value is not None and not valid_timezone(value):
+            raise ValueError("timezone must be an IANA name such as Europe/London")
         return value
 
     @field_validator("stack")

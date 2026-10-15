@@ -15,6 +15,9 @@ class Expect(BaseModel):
 
     # Deterministic: run in every mode, including the CI smoke run with the mock model.
     fixed_reply: str | None = None  # crisis or refusal: the reply must be the fixed one
+    # For fixed replies (crisis, refusal): words the reply must and must not contain.
+    fixed_includes: list[str] = Field(default_factory=list)
+    fixed_excludes: list[str] = Field(default_factory=list)
     lens: str | None = None  # the persona that must be active
     prompt_includes: list[str] = Field(default_factory=list)
     prompt_excludes: list[str] = Field(default_factory=list)

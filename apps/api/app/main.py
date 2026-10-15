@@ -37,6 +37,7 @@ from app.modules.persona.router import router as persona_router
 from app.modules.practice.router import router as practice_router
 from app.modules.privacy.router import router as privacy_router
 from app.modules.profile.router import router as profile_router
+from app.modules.regions.router import router as regions_router
 from app.modules.studio.router import router as studio_router
 from app.modules.subscriptions.router import router as billing_router
 
@@ -115,6 +116,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health_router)
     app.include_router(identity_router)
     app.include_router(profile_router)
+    app.include_router(regions_router)
     app.include_router(persona_router)
     app.include_router(conversations_router)
     app.include_router(memory_router)

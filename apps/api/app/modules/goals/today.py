@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.goals import checkin, reviews, service
 from app.modules.goals.models import CheckIn, Commitment, Goal
 from app.modules.notifications.service import unread_count
+from app.modules.profile.models import Profile
 
 
 def nudge(
@@ -54,7 +55,11 @@ def nudge(
 async def build_today(
     session: AsyncSession, user_id: UUID, *, today: date | None = None
 ) -> dict[str, Any]:
-    today = today or checkin.today_london()
+    if today is None:
+        tz = (
+            await session.execute(select(Profile.timezone).where(Profile.user_id == user_id))
+        ).scalar_one_or_none()
+        today = checkin.today_in(tz)
     open_rows = list(
         (
             await session.execute(

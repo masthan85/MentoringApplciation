@@ -33,6 +33,7 @@ async def _onboarded(client: httpx.AsyncClient, h: dict[str, str]) -> UUID:
     body = {
         "role_family": "data_engineer",
         "seniority": "senior",
+        "country": "GB",
         "stack": ["dbt"],
         "goals_summary": "Grow into architecture.",
         "current_challenge": "No time for design.",

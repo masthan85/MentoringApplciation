@@ -170,12 +170,13 @@ async def run_scenario(
         responder.hints = scenario.classify
     captured: list[str] = []
     started = time.perf_counter()
+    prefix_token = None
     try:
         await _ensure_sources(scenario.sources, created_sources)
         uid = await _provision(f"eval|{run_id}|{scenario.id}")
         conversation_id = await _set_up_user(uid, scenario)
         set_prompt_observer(captured.append)
-        slug_prefix_filter.set("eval-fixture-")
+        prefix_token = slug_prefix_filter.set("eval-fixture-")
         errors = []
         async for frame in run_turn(
             user_id=uid,
@@ -223,6 +224,8 @@ async def run_scenario(
         result.error = f"{type(exc).__name__}: {exc}"
     finally:
         set_prompt_observer(None)
+        if prefix_token is not None:
+            slug_prefix_filter.reset(prefix_token)
         result.latency_ms = result.latency_ms or round((time.perf_counter() - started) * 1000, 1)
     return result
 
@@ -252,6 +255,18 @@ def _check(
                 "no_unexpected_fixed_reply",
                 False,
                 f"a {fixed} reply was given to an ordinary message",
+            )
+        )
+    for needle in expect.fixed_includes:
+        add(
+            Check(f"fixed_includes: {needle[:30]}", needle in reply, "missing from the fixed reply")
+        )
+    for needle in expect.fixed_excludes:
+        add(
+            Check(
+                f"fixed_excludes: {needle[:30]}",
+                needle not in reply,
+                "present in the fixed reply",
             )
         )
     if expect.lens is not None:

@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { api, download } from "@/lib/browser-api";
+import { useRegions } from "@/lib/regions";
 import { signOut } from "@/lib/session";
 
+type Profile = { country: string | null; timezone: string | null };
 type Billing = { billing_enabled: boolean; plan: string; plan_name: string; daily_turns: number | null; features: Record<string, boolean>; can_manage: boolean };
 type Access = { at: string; action: string; by: string; resource_type: string | null };
 
@@ -20,14 +22,18 @@ export default function SettingsPage() {
 
 function Settings() {
   const router = useRouter();
+  const regions = useRegions();
   const [billing, setBilling] = useState<Billing | null>(null);
   const [log, setLog] = useState<Access[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [confirm, setConfirm] = useState("");
   const [message, setMessage] = useState("");
+  const [regionMessage, setRegionMessage] = useState("");
 
   useEffect(() => {
     void (async () => {
-      const [b, a] = await Promise.all([api.GET("/v1/billing"), api.GET("/v1/privacy/access-log")]);
+      const [b, a, p] = await Promise.all([api.GET("/v1/billing"), api.GET("/v1/privacy/access-log"), api.GET("/v1/profile")]);
+      if (p.data) setProfile(p.data as unknown as Profile);
       if (b.data) setBilling(b.data as unknown as Billing);
       if (a.data) setLog(a.data as unknown as Access[]);
     })();
@@ -42,6 +48,16 @@ function Settings() {
     else setMessage("Billing is unavailable just now.");
   }
 
+  async function changeCountry(country: string) {
+    const { data } = await api.PUT("/v1/profile", {
+      body: { country, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, confirm_onboarding: false },
+    });
+    if (data) {
+      setProfile(data as unknown as Profile);
+      setRegionMessage("Saved. Crisis resources, spelling and currency now follow this country.");
+    }
+  }
+
   async function remove(event: React.FormEvent) {
     event.preventDefault();
     const { response } = await api.POST("/v1/privacy/delete-account", { body: { confirm } });
@@ -54,6 +70,21 @@ function Settings() {
   return (
     <div className="space-y-10">
       <h1 className="text-xl font-semibold">Settings</h1>
+
+      <section aria-labelledby="region-h" className="space-y-2">
+        <h2 id="region-h" className="font-medium">Where you work</h2>
+        <label className="block text-sm">
+          Country
+          <select aria-label="Country" value={profile?.country ?? ""} onChange={(e) => void changeCountry(e.target.value)} className="mt-1 block rounded border bg-transparent p-2" style={{ borderColor: "var(--line)" }}>
+            <option value="" disabled>Choose a country</option>
+            {regions.map((r) => <option key={r.code} value={r.code}>{r.name}</option>)}
+          </select>
+        </label>
+        <p className="text-sm" style={{ color: "var(--muted)" }}>
+          This decides which helplines I show if you are ever in distress, how weeks and dates work for your check-ins, your spelling and your currency. Time zone: {profile?.timezone ?? "not set"}.
+        </p>
+        {regionMessage && <p role="status" className="text-sm">{regionMessage}</p>}
+      </section>
 
       <section aria-labelledby="plan-h" className="space-y-2">
         <h2 id="plan-h" className="font-medium">Plan</h2>

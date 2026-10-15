@@ -71,7 +71,13 @@ async def _post(path: str, data: dict[str, str]) -> dict[str, Any]:
 
 
 async def create_checkout(
-    *, user_id: str, email: str | None, price_id: str, plan: str, customer_id: str | None
+    *,
+    user_id: str,
+    email: str | None,
+    price_id: str,
+    plan: str,
+    customer_id: str | None,
+    currency: str,
 ) -> str:
     base = get_settings().public_web_url
     data = {
@@ -80,12 +86,15 @@ async def create_checkout(
         "line_items[0][quantity]": "1",
         "success_url": f"{base}/billing?checkout=success",
         "cancel_url": f"{base}/billing?checkout=cancelled",
+        "currency": currency,
         "client_reference_id": user_id,
         "metadata[user_id]": user_id,
         "metadata[plan]": plan,
         "subscription_data[metadata][user_id]": user_id,
         "subscription_data[metadata][plan]": plan,
     }
+    if get_settings().stripe_automatic_tax:
+        data["automatic_tax[enabled]"] = "true"
     if customer_id:
         data["customer"] = customer_id
     elif email:
