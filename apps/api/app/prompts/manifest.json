@@ -1,0 +1,19 @@
+{
+  "checkin_reply.v1.md": "39deb873c9cd692a961ac5ac91f7783fc63aa38f0bbcaf8fad35fac8f2ce6c4f",
+  "classifier.v1.md": "3ea748d74f684d6cdca53219ca9215e6744db0507acc81039fbd62dd53b3496e",
+  "conversation_summary.v1.md": "421739c01362f964ad06baff1eff64e5c908efff6795e0dab5ba5b59f7ed8873",
+  "eval_judge.v1.md": "6255be3b7f1125cc3afc47a08d9477ac0708bd9ecda531e67e07d92e10b04ceb",
+  "gas_suggestion.v1.md": "2226c795a7ab4364674e49a9a78913889f12a692a7d333a9473afb3da06cbdff",
+  "memory_extraction.v1.md": "6b5e30d4b4ff2b5671dcb83b71b859d786d8d1761dfa104684cdea69106a49dd",
+  "mentor_core.v1.md": "2ab62e3d55f30ef2774a7850e2c0b92b6282f0d4c60a749dc4871dded4eb8462",
+  "monthly_note.v1.md": "6a2e860eb853980217a62475c588aba02996cba9822f573c6bbf63fe9ee67d5a",
+  "onboarding.v1.md": "d0ebcd67528f7c492ef0503db9df3496ff1925f02be68d8ca2cff55c67eb6d95",
+  "practice_debrief.v1.md": "6310a7701114da787302d303496728771dcbf4e583e69d61cfb9d309f8836177",
+  "practice_roleplay.v1.md": "ca86833ddd429d05696b4d89c897aebfee84fa785e2f8cc8ea72d3e4c9aa5dd5",
+  "profile_extraction.v1.md": "f5cb1253f1906c9839c3911c99c5985066a00cb7c7da5d1cd7de731a47ddbff4",
+  "safety_policy.v1.md": "57bcf0bb3e9ba92cedb307acc4764cfbbd51fe335b801a14c90f8cfb09520f01",
+  "studio_draft.v1.md": "535d9ba58b1151c21877431bf49051f64f0ffd32321b2727deefb2cf97591e0d",
+  "voice_entailment.v1.md": "29544a0b49aeff8e3a557852bad1869f33fa5cd0b0113cb8e4e9b2833853d36c",
+  "voice_principles.v1.md": "6e8bba615efe17bc0e2deb17020b0d9643044b50a01b9abbf9b8545e8969e292",
+  "voice_rewrite.v1.md": "b27606a133150e413f00507fe37f0c5859b5b35e19261f905471ca5386edfdf6"
+}

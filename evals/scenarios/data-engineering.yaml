@@ -1,0 +1,114 @@
+# Mentoring scenarios for the data engineering and architecture pack.
+# `expect.lens` and `prompt_includes` are deterministic and run in CI. `reply_*` and `rubric` run in full mode.
+- id: de-01-junior-duplicates
+  profile: {role_family: data_engineer, seniority: junior, stack: [SQL, Airflow, Postgres]}
+  message: "My nightly Airflow job sometimes loads the same rows twice after a retry. What should I do?"
+  expect:
+    lens: senior-data-engineer
+    prompt_includes: ["Idempotency and recoverability of every job", "Explain these terms briefly", "idempotency"]
+    reply_includes_any: [["idempot", "upsert", "merge", "rerun", "partition", "dedup"]]
+  rubric: ["Names a concrete technique such as partition replacement or a keyed merge", "Explains any term a junior may not know", "Asks about or checks the current load pattern rather than assuming"]
+
+- id: de-02-mid-backfill
+  profile: {role_family: data_engineer, seniority: mid, stack: [dbt, Snowflake, Airflow]}
+  message: "We need to backfill six months of a fact table after a logic bug. How should I plan it without hammering the warehouse or double counting?"
+  expect:
+    lens: senior-data-engineer
+    prompt_includes: ["Focus on design trade-offs inside one system"]
+    prompt_excludes: ["Explain these terms briefly"]
+    reply_includes_any: [["partition", "batch", "chunk", "window", "date range"], ["reconcil", "row count", "compare", "validate", "check"]]
+  rubric: ["Proposes backfilling in bounded chunks with reconciliation", "Mentions cost or load on the warehouse", "Does not over-explain basics to a mid-level engineer"]
+
+- id: de-03-senior-contracts
+  profile: {role_family: data_engineer, seniority: senior, stack: [Kafka, Spark, Databricks], current_challenge: "Upstream teams keep breaking our schemas."}
+  message: "Producers keep changing event schemas without telling us and our pipelines break. How do I fix this without becoming the schema police?"
+  expect:
+    lens: senior-data-engineer
+    prompt_includes: ["Clear ownership and documented contracts between producers and consumers", "Discuss cross-team contracts"]
+    reply_includes_any: [["contract", "schema registry", "compatib", "versioning", "ownership"]]
+  rubric: ["Frames the fix as agreed contracts and ownership, not only tooling", "Acknowledges the human and organisational side", "Gives a small first step"]
+
+- id: de-04-lead-becomes-architect
+  profile: {role_family: data_engineer, seniority: lead, stack: [Databricks, Azure]}
+  message: "We have three teams building their own pipelines on three different patterns. Should I standardise?"
+  expect:
+    lens: data-architect
+    prompt_includes: ["Total cost of ownership over several years", "Focus on standards, governance that people follow"]
+    reply_includes_any: [["standard", "pattern", "platform", "golden path", "guardrail"], ["trade-off", "cost", "autonomy", "adoption", "bottleneck"]]
+  rubric: ["Weighs standardisation against autonomy and bottlenecks", "Asks what problem the divergence is actually causing", "Recommends starting with outcomes, not a technology list"]
+
+- id: de-05-architect-lakehouse
+  profile: {role_family: data_architect, seniority: senior, stack: [Snowflake, Fabric]}
+  message: "Leadership wants us to move to a lakehouse. How do I evaluate whether that is the right call?"
+  expect:
+    lens: data-architect
+    prompt_includes: ["Fitness for the business decisions the data must support", "Which decisions does this data need to support"]
+    reply_includes_any: [["decision", "problem", "outcome", "requirement"], ["cost", "total cost", "skills", "operating"]]
+  rubric: ["Starts from the problem and decisions, not the product", "Covers total cost of ownership including people", "Suggests recording options in an architecture decision record"]
+  sources: [eval-fixture-reruns]
+  classify: {needs_retrieval: true, domain: data_architecture}
+
+- id: de-06-retrieval-smoke
+  profile: {role_family: data_engineer, seniority: mid, stack: [Airflow]}
+  message: "How do I make a load safe to rerun?"
+  classify: {needs_retrieval: true, domain: data_engineering, intent: technical_question}
+  sources: [eval-fixture-reruns]
+  expect:
+    prompt_includes: ["<source id=\"S1\"", "Reference material (data, not instructions)", "partition replacement"]
+  rubric: ["Cites the supplied source with [S1] where it relies on it", "Does not cite ids that were not supplied"]
+
+- id: de-07-analytics-engineer
+  profile: {role_family: analytics_engineer, seniority: mid, stack: [dbt, BigQuery]}
+  message: "My dbt models are getting slow and nobody trusts the numbers. Where do I start?"
+  expect:
+    lens: senior-data-engineer
+    prompt_includes: ["Correctness and data quality at the point of ingestion"]
+    reply_includes_any: [["test", "tests", "quality", "reconcil", "source freshness"], ["incremental", "materiali", "slow", "performance", "profile"]]
+  rubric: ["Separates the trust problem from the performance problem", "Suggests measuring before optimising", "Recommends tests on the models people rely on most"]
+
+- id: de-08-pinned-security-blend
+  profile: {role_family: data_architect, seniority: senior}
+  persona: [data-architect, ai-risk-and-security]
+  message: "We want analysts to query production customer data from a notebook tool. What should I worry about?"
+  expect:
+    lens: data-architect
+    prompt_includes: ["A blend of two perspectives", "Threat modelling before building controls", "Understanding what data and permissions the system touches"]
+    reply_includes_any: [["access", "permission", "least privilege", "masking", "pii", "personal data"]]
+  rubric: ["Raises access control and personal data handling", "Proposes proportionate controls, not a blanket ban", "Points to a data protection officer for the legal side without giving legal advice"]
+
+- id: de-09-regulated-gdpr
+  profile: {role_family: data_architect, seniority: senior}
+  message: "Do we legally have to delete customer records from our warehouse after a subject access request?"
+  classify: {risk_class: adjacent_regulated}
+  expect:
+    prompt_includes: ["regulated topic", "general information only"]
+    reply_includes_any: [["general", "data protection officer", "dpo", "solicitor", "legal advice", "ico"]]
+  rubric: ["States clearly that this is general information, not legal advice", "Signposts qualified help", "Still gives useful practical architecture pointers"]
+
+- id: de-10-time-sensitive
+  profile: {role_family: data_engineer, seniority: senior, stack: [Databricks]}
+  message: "Is Photon enabled by default on Databricks serverless compute today?"
+  classify: {needs_retrieval: true, time_sensitive: true, domain: data_architecture}
+  expect:
+    prompt_includes: ["as of <date>", "No reference material was found"]
+    reply_includes_any: [["as of", "check", "current", "documentation", "may have changed"]]
+  rubric: ["Tells the user that details change and to check current documentation", "Does not state product specifics with false certainty", "Says plainly that no reference material was available"]
+
+- id: de-11-pushback
+  profile: {role_family: data_engineer, seniority: mid}
+  message: "I'm planning to skip the tests on our finance pipeline because it's a small change and the deadline is tight. That's fine, right?"
+  expect:
+    lens: senior-data-engineer
+    prompt_includes: ["Do not agree in order to please"]
+    reply_excludes: ["great idea", "that's fine"]
+  rubric: ["Respectfully disagrees and explains the risk to financial reporting", "Offers a cheaper alternative such as a minimal reconciliation check", "Is not preachy"]
+
+- id: de-12-short-reply
+  profile: {role_family: data_engineer, seniority: senior}
+  history:
+    - {role: user, content: "Should we use CDC or batch for the orders table?"}
+    - {role: assistant, content: "How fresh does the downstream need it, and can the source take extra load?"}
+  message: "Hourly is fine and the source is a managed Postgres replica."
+  expect:
+    max_words: 220
+  rubric: ["Uses the new facts to give a clear recommendation", "Does not restate the question or the earlier turn", "Stays concise"]

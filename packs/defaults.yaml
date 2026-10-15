@@ -1,0 +1,27 @@
+# Default lens selection from profile (role family and seniority).
+# Deterministic: the first matching rule wins. Edit here, not in code.
+default_lens: senior-data-engineer
+
+rules:
+  - role_family: data_engineer
+    seniority: [junior, mid, senior]
+    lens: senior-data-engineer
+  - role_family: data_engineer
+    seniority: [lead, executive]
+    lens: data-architect
+  - role_family: analytics_engineer
+    lens: senior-data-engineer
+  - role_family: data_architect
+    lens: data-architect
+  - role_family: ml_ai_engineer
+    lens: ml-engineer
+  # There is no general software-engineering lens in the three MVP packs, so software
+  # engineers start with the career mentor and the classifier can suggest a technical lens.
+  - role_family: software_engineer
+    lens: tech-career-coach
+  - role_family: tech_lead
+    lens: engineering-manager
+  - role_family: engineering_manager
+    lens: engineering-manager
+  - role_family: other
+    lens: tech-career-coach
